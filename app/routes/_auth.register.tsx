@@ -29,7 +29,6 @@ export const action: ActionFunction = async ({ request }) => {
       return json({ error: error.message || "Error en el registre." }, { status: response.status });
     }
 
-    // Respuesta de éxito
     return json({ success: "Registre completat amb èxit!" });
   } catch (error) {
     return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });

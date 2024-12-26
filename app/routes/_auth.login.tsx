@@ -17,15 +17,18 @@ export const action: ActionFunction = async ({ request }) => {
       },
       body: JSON.stringify(data),
     });
-
+    const error = await response.json();
     if (!response.ok) {
-      const error = await response.json();
+      
       return json(
         { error: error.message || "Error en el inici de sessió." },
         { status: response.status }
       );
     }
+    console.log(error);
+    
     return json({ success: "Login completat amb èxit!" });
+
   } catch (error) {
     return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });
   }
