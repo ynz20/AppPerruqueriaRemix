@@ -1,5 +1,16 @@
-import { Form, useActionData } from "@remix-run/react";
-import { ActionFunction, json } from "@remix-run/node";
+import { Form, redirect, useActionData } from "@remix-run/react";
+import { ActionFunction, createCookieSessionStorage, json } from "@remix-run/node";
+
+export const sessionStorage = createCookieSessionStorage({
+  cookie: {
+    name: "token",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 30 * 24 * 60 * 60, 
+    path: "/",
+  },
+});
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -26,8 +37,19 @@ export const action: ActionFunction = async ({ request }) => {
       );
     }
     console.log(error);
-    
-    return json({ success: "Login completat amb èxit!" });
+
+    const session = await sessionStorage.getSession();
+    session.set("token", error.token);
+    // session.set("user_id", data.user_id);
+    const setCookie = await sessionStorage.commitSession(session);
+    return redirect("/clients", {
+        headers: {
+            "Set-Cookie": setCookie,
+        },
+        status: 302,
+    });
+
+
 
   } catch (error) {
     return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });

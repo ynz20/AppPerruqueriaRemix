@@ -2,27 +2,42 @@
 
 import { useLoaderData, Form } from "@remix-run/react";
 import { LoaderFunction, ActionFunction, json } from "@remix-run/node";
+import { sessionStorage } from "./_auth.login";
 
+export interface Client {
+  dni: string;       // DNI del client
+  name: string;      // Nom del client
+  surname: string;   // Cognom del client
+  telf: string;      // Telèfon del client
+  email: string;     // Correu electrònic del client
+}
 // Loader per GET de clients
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
   try {
+    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+    const token = session.get("token");
+
     const response = await fetch("http://localhost:8085/api/clients", {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
 
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
-
     const clients = await response.json();
     return json(clients);
   } catch (err) {
+    console.error("Error al carregar els clients:", err);
     throw new Response("Error en carregar els clients. Intenta-ho més tard.", {
       status: 500,
     });
   }
 };
+
 
 // Action per gestionar CRUD de clients (Exemple de com tractar-ho)
 export const action: ActionFunction = async ({ request }) => {
@@ -51,8 +66,8 @@ export const action: ActionFunction = async ({ request }) => {
 
 //llista de clients
 export default function Clients() {
-  const clients = useLoaderData<typeof loader>();
-
+  
+  const {clients} = useLoaderData<Client[]>();
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Llista de Clients</h1>
