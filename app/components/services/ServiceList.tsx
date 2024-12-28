@@ -21,7 +21,7 @@ export default function ServiceList({ services }: ServiceListProps) {
                         <tr key={service.id} className="hover:bg-gray-100 text-black">
                             <td className="px-4 py-2 border-b">{service.name}</td>
                             <td className="px-4 py-2 border-b">{service.description}</td>
-                            <td className="px-4 py-2 border-b">{service.price}</td>
+                            <td className="px-4 py-2 border-b">{service.price}€</td>
                         </tr>
                     ))}
                 </tbody>
