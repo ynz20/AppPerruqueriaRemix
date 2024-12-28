@@ -1,9 +1,8 @@
-//Falta gestionar token per tal que funcioni
-
 import { useLoaderData, Form } from "@remix-run/react";
 import { LoaderFunction, ActionFunction, json } from "@remix-run/node";
-import { sessionStorage } from "./_auth.login";
+import { getTokenFromRequest } from "../utils/sessionUtils";
 
+//Interfície de client
 export interface Client {
   dni: string;       // DNI del client
   name: string;      // Nom del client
@@ -11,23 +10,31 @@ export interface Client {
   telf: string;      // Telèfon del client
   email: string;     // Correu electrònic del client
 }
+
 // Loader per GET de clients
 export const loader: LoaderFunction = async ({ request }) => {
   try {
-    const session = await sessionStorage.getSession(request.headers.get("Cookie"));
-    const token = session.get("token");
+    // Obtenir el token utilitzant la funció modularitzada
+    const token = await getTokenFromRequest(request);
 
+    if (!token) {
+      throw new Response("No autoritzat. Inicia sessió per accedir.", { status: 401 });
+    }
+
+    // Petició a l'API de clients
     const response = await fetch("http://localhost:8085/api/clients", {
       method: "GET",
-      headers: { 
+      headers: {
         "Authorization": `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
+    // Comprovació de la resposta de l'API
     if (!response.ok) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
+
     const clients = await response.json();
     return json(clients);
   } catch (err) {
@@ -37,6 +44,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   }
 };
+
 
 
 // Action per gestionar CRUD de clients (Exemple de com tractar-ho)

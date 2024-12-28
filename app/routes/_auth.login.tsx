@@ -1,16 +1,7 @@
 import { Form, redirect, useActionData } from "@remix-run/react";
 import { ActionFunction, createCookieSessionStorage, json } from "@remix-run/node";
+import { sessionStorage } from "../utils/sessionUtils";
 
-export const sessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: "token",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 30 * 24 * 60 * 60, 
-    path: "/",
-  },
-});
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
