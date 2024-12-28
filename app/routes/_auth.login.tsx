@@ -31,13 +31,14 @@ export const action: ActionFunction = async ({ request }) => {
 
     const session = await sessionStorage.getSession();
     session.set("token", error.token);
+    session.set("role", error.role);
     // session.set("user_id", data.user_id);
     const setCookie = await sessionStorage.commitSession(session);
     return redirect("/clients", {
-        headers: {
-            "Set-Cookie": setCookie,
-        },
-        status: 302,
+      headers: {
+        "Set-Cookie": setCookie,
+      },
+      status: 302,
     });
 
 
