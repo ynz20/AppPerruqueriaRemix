@@ -72,7 +72,7 @@ export default function Clients() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Llista de Clients</h1>
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300">
+        <table className="min-w-full bg-white border border-gray-300 text-black">
           <thead>
             <tr>
               <th className="px-4 py-2 border-b">Nom</th>
@@ -83,7 +83,7 @@ export default function Clients() {
           </thead>
           <tbody>
             {clients.map((client) => (
-              <tr key={client.id} className="hover:bg-gray-100">
+              <tr key={client.id} className="hover:bg-gray-100 text-black">
                 <td className="px-4 py-2 border-b">{client.name}</td>
                 <td className="px-4 py-2 border-b">{client.surname}</td>
                 <td className="px-4 py-2 border-b">{client.dni}</td>
