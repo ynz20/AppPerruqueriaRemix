@@ -38,7 +38,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({ reservations 
   };
 
   // Format de la targeta de cada reserva
-  const eventContent = (eventInfo: any) => {
+  const eventContent = (eventInfo: { event: { extendedProps: { clientName: string; userName: string; hour: string; service: string; } } }) => {
     const { clientName, userName, hour, service } = eventInfo.event.extendedProps;
 
     return (
