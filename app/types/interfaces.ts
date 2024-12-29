@@ -22,7 +22,8 @@ export interface Reservation {
   hour: string;      // Hora de la reserva
   status: string;    // Estat de la reserva
   user: User;    // Informació del treballador
-  client: Client;    // Informació del client
+  client: Client;    // Informació del client+
+  service: Service;  // Informació del servei
 }
 
 export interface User {
@@ -33,3 +34,4 @@ export interface User {
   email: string;     // Correu electrònic del treballador
   role: boolean;      // Rol del treballador
 }
+
