@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { LoaderFunction, json } from "@remix-run/node";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import ClientList from "~/components/clients/ClientList";
@@ -37,9 +37,24 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function ClientsPage() {
   const { clients } = useLoaderData<{ clients: Client[] }>();
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4 text-black">Llista de Clients</h1>
-      <ClientList clients={clients} />
-    </div>
+    <>
+    <Outlet />
+    <main>
+      <section>
+        <h1 className="text-2xl font-bold mb-4 text-black">Clients</h1>
+        <Link
+        to="add"
+        className="flex items-center rounded bg-gray-100 p-2 text-blue-500 shadow-md hover:text-blue-700"
+      >
+        <span className="ml-2">Afegir Clients</span>
+      </Link>
+
+      </section>
+      <div className="p-6">
+          <h1 className="text-2xl font-bold mb-4 text-black">Llista de Clients</h1>
+        <ClientList clients={clients} />
+      </div>
+    </main>
+    </>
   );
 }
