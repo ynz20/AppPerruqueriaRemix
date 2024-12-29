@@ -21,7 +21,7 @@ export default function ClientList({ clients }: ClientListProps) {
           </tr>
         </thead>
         <tbody>
-          {clients.map((client) => (
+          {clients?.map((client) => (
             <tr key={client.dni} className="hover:bg-gray-100 text-black">
               <td className="px-4 py-2 border-b">{client.name}</td>
               <td className="px-4 py-2 border-b">{client.surname}</td>
