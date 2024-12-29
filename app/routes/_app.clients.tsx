@@ -1,36 +1,19 @@
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
-import { LoaderFunction, json } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import ClientList from "~/components/clients/ClientList";
 import { Client } from "~/types/interfaces";
+import { getClients } from "~/data/client.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  try {
-    const token = await getTokenFromRequest(request);
+  const token = await getTokenFromRequest(request);
 
-    if (!token) {
-      throw new Response("Inicia sessió per accedir.", { status: 401 });
-    }
-
-    const response = await fetch("http://localhost:8085/api/clients", {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return json(data);
-  } catch (err) {
-    throw new Response("Error en carregar els clients. Intenta-ho més tard.", {
-      status: 500,
-    });
+  if (!token) {
+    throw new Response("Inicia sessió per accedir.", { status: 401 });
   }
+
+  const clients = await getClients(token);
+  return clients;
 };
 
 
