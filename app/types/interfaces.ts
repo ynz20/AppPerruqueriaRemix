@@ -7,10 +7,11 @@ export interface Client {
 }
 
 export interface Service {
-  id: number;        // Identificador del servei
+  id: number;
   name: string;      // Nom del servei
   description: string; // Descripció del servei
   price: number;     // Preu del servei
+  estimation: string; // Estimació del servei
 }
 
 export interface Reservation {
