@@ -1,5 +1,6 @@
-import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import { Form, Link, useActionData, useMatches, useNavigation, useParams } from "@remix-run/react";
 import React from "react";
+import { Client } from "~/types/interfaces";
 
 interface ValidationErrors {
   [key: string]: string;
@@ -9,8 +10,14 @@ const ClientsForm: React.FC = () => {
   const navigation = useNavigation();
   const validationErrors = useActionData<ValidationErrors>();
   const isSubmitting = navigation.state !== "idle";
+  const params = useParams();
+  const matches = useMatches();
 
-  const defaultValues = {
+  const matchedRoute = matches.find((match) => match.id === "routes/_app.clients");
+
+  const clients = matchedRoute?.data?.clients as Client[] | undefined;
+  
+  const clientData = clients?.find(({ dni }) => dni === params.dni) || {
     dni: "",
     name: "",
     surname: "",
@@ -20,8 +27,8 @@ const ClientsForm: React.FC = () => {
 
   return (
     <Form
-      method="post"
-      action="/clients/add"
+      method={clientData.dni ? "put" : "post"}
+      action={clientData.dni ? `/clients/${clientData.dni}` : "/clients/add"}
       className="flex flex-col rounded-lg bg-gray-100 p-6 shadow-md"
       id="clients-form"
     >
@@ -37,7 +44,7 @@ const ClientsForm: React.FC = () => {
           id="dni"
           name="dni"
           required
-          defaultValue={defaultValues.dni}
+          defaultValue={clientData.dni}
           maxLength={9}
           className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
@@ -55,7 +62,7 @@ const ClientsForm: React.FC = () => {
           id="name"
           name="name"
           required
-          defaultValue={defaultValues.name}
+          defaultValue={clientData.name}
           maxLength={50}
           className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
@@ -73,7 +80,7 @@ const ClientsForm: React.FC = () => {
           id="surname"
           name="surname"
           required
-          defaultValue={defaultValues.surname}
+          defaultValue={clientData.surname}
           maxLength={50}
           className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
@@ -92,7 +99,7 @@ const ClientsForm: React.FC = () => {
           name="telf"
           required
           pattern="[0-9]{9,}"
-          defaultValue={defaultValues.telf}
+          defaultValue={clientData.telf}
           title="Introdueix un número de telèfon vàlid."
           className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
@@ -110,7 +117,7 @@ const ClientsForm: React.FC = () => {
           id="email"
           name="email"
           required
-          defaultValue={defaultValues.email}
+          defaultValue={clientData.email}
           className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
       </p>

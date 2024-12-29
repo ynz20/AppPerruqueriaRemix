@@ -1,3 +1,4 @@
+import { Link, useFetcher } from "@remix-run/react";
 import { Client } from "~/types/interfaces";
 
 interface ClientListProps {
@@ -5,6 +6,8 @@ interface ClientListProps {
 }
 
 export default function ClientList({ clients }: ClientListProps) {
+  const fetcher = useFetcher(); //Per eliminar utilitzarem el fetcher
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300 text-black">
@@ -25,6 +28,14 @@ export default function ClientList({ clients }: ClientListProps) {
               <td className="px-4 py-2 border-b">{client.dni}</td>
               <td className="px-4 py-2 border-b">{client.telf}</td>
               <td className="px-4 py-2 border-b">{client.email}</td>
+              <td className="px-4 py-2 border-b">
+                <Link
+                to={`../clients/${client.dni}`}
+                className = "transform text-xl text-blue-500 transition-transform hover:scale-125 hover:text-blue-700"
+                >
+                  ✏️
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>

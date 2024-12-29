@@ -30,6 +30,6 @@ export async function action({ request }) {
     };
 
     await addClient(clientData, token);
-
+    
     return redirect("/clients");
 }
