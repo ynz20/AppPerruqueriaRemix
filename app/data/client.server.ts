@@ -15,7 +15,6 @@ export async function addClient(clientData: Client, token) {
     });
 }
 
-
 export async function getClients(token){
   try {
     const response = await fetch("http://localhost:8085/api/clients", {
