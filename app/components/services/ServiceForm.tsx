@@ -104,7 +104,7 @@ const ServicesForm: React.FC = () => {
           htmlFor="estimation"
           className="mb-2 block font-semibold text-gray-700"
         >
-          Estimació (hora:minuts:segons)
+          Estimació (Minuts)
         </label>
         <input
           type="text"

@@ -14,6 +14,7 @@ export default function ServiceList({ services }: ServiceListProps) {
             <th className="px-4 py-2 border-b">Nom</th>
             <th className="px-4 py-2 border-b">Descripció</th>
             <th className="px-4 py-2 border-b">Preu</th>
+            <th className="px-4 py-2 border-b">Estimació</th>
             <th className="px-4 py-2 border-b">Accions</th>
           </tr>
         </thead>
@@ -23,6 +24,7 @@ export default function ServiceList({ services }: ServiceListProps) {
               <td className="px-4 py-2 border-b">{service.name}</td>
               <td className="px-4 py-2 border-b">{service.description}</td>
               <td className="px-4 py-2 border-b">{service.price}€</td>
+              <td className="px-4 py-2 border-b">{service.estimation} minuts</td>
               <td className="px-4 py-2 border-b">
                 <Link
                   to={`../services/${service.id}`}
