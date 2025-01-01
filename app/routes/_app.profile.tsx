@@ -116,7 +116,9 @@ export default function Profile() {
         </div>
       )}
 
+      
       <Form method="post" className="space-y-6">
+        {/* Manera dinamica per afegir camps al formulari  */}
         {[
           { id: "name", label: "Nom", type: "text", value: user.name },
           { id: "surname", label: "Cognoms", type: "text", value: user.surname },
