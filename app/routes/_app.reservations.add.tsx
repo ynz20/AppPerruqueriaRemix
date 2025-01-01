@@ -53,7 +53,8 @@ export async function action({ request }: { request: Request }) {
   
   const hour = formData.get("hour") as string;
 
-  if (!hour || !/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(hour)) {
+  console.log(hour);
+  if (!hour || !/^([01]\d|2[0-3]):([0-5]\d)$/.test(hour)) {
     throw new Error("Hora no válida. Usa el formato HH:mm:ss.");
   }
 
