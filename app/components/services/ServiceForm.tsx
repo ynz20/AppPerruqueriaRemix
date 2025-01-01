@@ -1,6 +1,13 @@
-import { Form, Link, useActionData, useNavigation, useParams, useMatches } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useNavigation,
+  useParams,
+  useMatches,
+} from "@remix-run/react";
 import React from "react";
-import { Service } from "~/types/interfaces"; 
+import { Service } from "~/types/interfaces";
 
 interface ValidationErrors {
   [key: string]: string;
@@ -13,10 +20,11 @@ const ServicesForm: React.FC = () => {
   const params = useParams();
   const matches = useMatches();
 
-  const matchedRoute = matches.find((match) => match.id === "routes/_app.services");
+  const matchedRoute = matches.find(
+    (match) => match.id === "routes/_app.services"
+  );
 
   const services = matchedRoute?.data?.services as Service[] | undefined;
-
 
   const serviceData = services?.find(({ id }) => id === Number(params.id)) || {
     id: "",
@@ -33,7 +41,9 @@ const ServicesForm: React.FC = () => {
       className="flex flex-col rounded-lg bg-gray-100 p-6 shadow-md"
       id="services-form"
     >
-
+      {serviceData.id && (
+        <input type="hidden" name="id" value={serviceData.id} />
+      )}
       <p className="mb-4">
         <label
           htmlFor="name"
@@ -122,10 +132,7 @@ const ServicesForm: React.FC = () => {
         >
           {isSubmitting ? "Saving..." : "Submit"}
         </button>
-        <Link
-          className="text-indigo-500 hover:underline"
-          to=".."
-        >
+        <Link className="text-indigo-500 hover:underline" to="..">
           Cancel·la
         </Link>
       </div>
