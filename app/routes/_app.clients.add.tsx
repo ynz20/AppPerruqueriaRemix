@@ -1,3 +1,4 @@
+import { ActionFunction } from "@remix-run/node";
 import { redirect, useNavigate } from "@remix-run/react";
 import ClientsForm from "../components/clients/ClientsForm";
 import Modal from "../components/utils/Modal";
@@ -18,7 +19,7 @@ export default function ClientsAddPage() {
     )
 }
 
-export async function action({ request }) {
+export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const token = await getTokenFromRequest(request);
     const clientData = {
