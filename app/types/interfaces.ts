@@ -47,7 +47,9 @@ export interface User {
   dni: string;       // DNI del treballador
   name: string;      // Nom del treballador
   surname: string;   // Cognom del treballador
+  nick: string;      // Nick del treballador
   telf: string;      // Telèfon del treballador
+  password: string;  // Contrasenya del treballador
   email: string;     // Correu electrònic del treballador
   role: boolean;      // Rol del treballador
 }

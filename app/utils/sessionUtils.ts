@@ -22,6 +22,17 @@ export const roleSessionStorage = createCookieSessionStorage({
   },
 });
 
+export const userSessionStorage = createCookieSessionStorage({
+  cookie: {
+    name: "user_id",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  },
+});
+
 
 // Funció per obtenir el token des de les cookies
 export async function getTokenFromRequest(request: Request): Promise<string | null> {
@@ -32,6 +43,11 @@ export async function getTokenFromRequest(request: Request): Promise<string | nu
 export async function getUserRoleFromRequest(request: Request): Promise<number | null> {
   const session = await sessionStorage.getSession(request.headers.get("Cookie"));
   return session.get("role");
+}
+
+export async function getUserIdFromRequest(request: Request): Promise<number | null> {
+  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  return session.get("user_id");
 }
 
 
