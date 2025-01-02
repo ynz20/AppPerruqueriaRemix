@@ -62,7 +62,7 @@ export async function action({ request }: { request: Request }) {
     client_dni: formData.get("client") as string,
     service_id: parseInt(formData.get("service") as string),
     worker_dni: formData.get("worker") as string,
-    hour, // Hora ya validada
+    hour,
     date: new Date(formData.get("day") as string),
     status: "pending",
   };
