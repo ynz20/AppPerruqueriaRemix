@@ -15,7 +15,7 @@ const ClientsForm: React.FC = () => {
 
   const matchedRoute = matches.find((match) => match.id === "routes/_app.clients");
 
-  const clients = matchedRoute?.data?.clients as Client[] | undefined;
+  const clients = (matchedRoute?.data as { clients: Client[] } | undefined)?.clients;
   
   const clientData = clients?.find(({ dni }) => dni === params.dni) || {
     dni: "",

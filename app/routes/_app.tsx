@@ -14,14 +14,15 @@ export default function Layout() {
   return (
     <div className="flex h-screen">
       {/* BARRA DE NAVEGACIÓ lateral amb links */} 
-      <nav className="w-1/5 bg-gray-800 text-white flex flex-col items-center justify-center">
+      <nav className="w-1/5 bg-black-japan text-white-japan flex flex-col items-center justify-center">
         <ul className="space-y-6">
+          {/* Rol User */}
           {role === 0 && (
             <>
               <li>
                 <Link
                   to="/reservations"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Reserves
                 </Link>
@@ -29,7 +30,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/clients"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Clients
                 </Link>
@@ -37,19 +38,20 @@ export default function Layout() {
               <li>
                 <Link
                   to="/profile"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   El meu perfil
                 </Link>
               </li>
             </>
           )}
+          {/* Rol Admin */}
           {role === 1 && (
             <>
               <li>
                 <Link
                   to="/reservations"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Reserves
                 </Link>
@@ -57,7 +59,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/clients"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Clients
                 </Link>
@@ -65,7 +67,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/services"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Serveis
                 </Link>
@@ -73,7 +75,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/history"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Historial de reserves
                 </Link>
@@ -81,7 +83,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/profile"
-                  className="text-lg font-semibold hover:text-indigo-400 transition"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   El meu perfil
                 </Link>
@@ -93,7 +95,7 @@ export default function Layout() {
             <Form method="post" action="/logout">
               <button
                 type="submit"
-                className="text-lg text-red-500 font-semibold hover:text-red-400 transition"
+                className=" absolute bottom-12 text-lg text-red-500 font-semibold hover:text-red-400 transition"
               >
                 {role === 0 ? "Tanca sessió" : "Sortir"}
               </button>
@@ -103,7 +105,7 @@ export default function Layout() {
       </nav>
 
       {/* Contingut principal */}
-      <main className="flex-1 bg-gray-100 p-6">
+      <main className="flex-1 bg-white-japan p-6">
         <Outlet />
       </main>
     </div>
