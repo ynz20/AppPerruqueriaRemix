@@ -1,6 +1,8 @@
 import {  ReservationData } from "~/types/interfaces";
 
 export async function addReservation(reservationData: ReservationData, token) {
+
+    console.log('reservationData',reservationData);
     if (!token) {
         throw new Response("Inicia sessió per accedir.", { status: 401 });
     }
@@ -12,4 +14,8 @@ export async function addReservation(reservationData: ReservationData, token) {
         },
         body: JSON.stringify(reservationData),
     });
+
+    if (!response.ok) {
+        throw new Error("Error al crear la reserva");
+    }
 }
