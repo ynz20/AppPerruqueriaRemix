@@ -95,7 +95,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto mt-12 p-8">
+    <div className="max-w-3xl mx-auto p-2">
       <h1 className="text-gray-800 text-3xl font-bold mb-8">El meu Perfil</h1>
 
       {actionData?.errors && (
@@ -117,7 +117,7 @@ export default function Profile() {
       )}
 
       
-      <Form method="post" className="space-y-6">
+      <Form method="post" className="space-y-3">
         {/* Manera dinamica per afegir camps al formulari  */}
         {[
           { id: "name", label: "Nom", type: "text", value: user.name },
@@ -157,7 +157,7 @@ export default function Profile() {
         <div className="flex justify-start">
           <button
             type="submit"
-            className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="px-6 py-2 bg-red-japan  text-white font-medium rounded-md hover:bg-black-japan focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Desar
           </button>
