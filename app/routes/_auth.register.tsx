@@ -1,5 +1,6 @@
-import { ActionFunction, json } from "@remix-run/node";
+import { ActionFunction, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
+import { ActionData } from "~/types/interfaces";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -29,150 +30,133 @@ export const action: ActionFunction = async ({ request }) => {
       return json({ error: error.message || "Error en el registre." }, { status: response.status });
     }
 
-    return json({ success: "Registre completat amb èxit!" });
+    return redirect("/login");
   } catch (error) {
     return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });
   }
 };
 
+
+
 export default function Register() {
-  const actionData = useActionData();
+  const actionData = useActionData<ActionData>();
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-md">
-      <h1 className="text-2xl font-bold text-center mb-4 text-black">Registre</h1>
-      {actionData?.error && (
-        <p className="text-red-500 text-sm mb-4">
-          {typeof actionData.error === "string" ? actionData.error : JSON.stringify(actionData.error)}
-        </p>
-      )}
-      {actionData?.success && (
-        <p className="text-green-500 text-sm mb-4">
-          {typeof actionData.success === "string" ? actionData.success : JSON.stringify(actionData.success)}
-        </p>
-      )}
-      <Form method="post">
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="dni"
-          >
-            DNI
-          </label>
-          <input
-            type="text"
-            id="dni"
-            name="dni"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+    <div className="flex min-h-screen overflow-hidden">
+      {/* Menú Lateral */}
+      <div className="w-1/3 bg-black-japan text-yellow-japan flex flex-col items-center justify-center">
+        <div className="text-center px-6">
+          <img
+            src="../../public/haircutLogo.png"
+            alt="Icono"
+            className="mb-6 w-20 h-20"
           />
+          <h1 className="text-4xl font-bold mb-2">Registra’t</h1>
+          <h2 className="text-2xl">per accedir a tots els serveis!</h2>
         </div>
+      </div>
 
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="name"
-          >
-            Nom
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
+      {/* Form */}
+      <div className="w-2/3 bg-[#faf8e8] flex flex-col items-center justify-center">
+        <div className="w-3/4 max-w-lg p-8">
+          <h1 className="text-3xl font-bold text-red-700 text-center mb-6">
+            Benvingut/da!
+          </h1>
+          {actionData?.error && (
+            <p className="text-red-500 text-sm mb-4 text-center">
+              {typeof actionData.error === "string"
+                ? actionData.error
+                : JSON.stringify(actionData.error)}
+            </p>
+          )}
+          {actionData?.success && (
+            <p className="text-green-500 text-sm mb-4 text-center">
+              {typeof actionData.success === "string"
+                ? actionData.success
+                : JSON.stringify(actionData.success)}
+            </p>
+          )}
+          <Form method="post">
+            <div className="space-y-2">
+              <input
+                type="text"
+                id="nick"
+                name="nick"
+                placeholder="Nom d’usuari"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Nom"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="text"
+                id="surname"
+                name="surname"
+                placeholder="Cognom"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="text"
+                id="dni"
+                name="dni"
+                placeholder="DNI"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="tel"
+                id="telf"
+                name="telf"
+                placeholder="Telèfon"
+                required
+                pattern="[0-9]{9}"
+                title="Introdueix un número de telèfon vàlid (9 dígits)."
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Correu"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Contrasenya"
+                required
+                className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+
+            <div className="text-center mt-6">
+              <p className="text-sm text-black mb-4">
+                Ja tens compte?{" "}
+                <a href="/login" className="text-red-japan underline">
+                  Accedir-hi
+                </a>
+              </p>
+              <button
+                type="submit"
+                className="w-full py-3 bg-gray-900 text-white font-semibold rounded-md shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              >
+                Registrar-se
+              </button>
+            </div>
+          </Form>
         </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="surname"
-          >
-            Cognom
-          </label>
-          <input
-            type="text"
-            id="surname"
-            name="surname"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="nick"
-          >
-            Nom d&apos;usuari
-          </label>
-          <input
-            type="text"
-            id="nick"
-            name="nick"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="telf"
-          >
-            Telèfon
-          </label>
-          <input
-            type="tel"
-            id="telf"
-            name="telf"
-            required
-            pattern="[0-9]{9}"
-            title="Introdueix un número de telèfon vàlid (9 dígits)."
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="email"
-          >
-            Correu electrònic
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium text-gray-700"
-            htmlFor="password"
-          >
-            Contrasenya
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        >
-          Registrar-se
-        </button>
-      </Form>
+      </div>
     </div>
   );
 }
+
+

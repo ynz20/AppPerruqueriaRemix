@@ -1,3 +1,8 @@
+export interface ActionData {
+  error?: string;
+  success?: string;
+}
+
 export interface Client {
   dni: string;       // DNI del client
   name: string;      // Nom del client
