@@ -1,3 +1,8 @@
+export interface ActionData {
+  error?: string;
+  success?: string;
+}
+
 export interface Client {
   dni: string;       // DNI del client
   name: string;      // Nom del client
@@ -26,6 +31,17 @@ export interface Reservation {
   client: Client;    // Informació del client+
   service: Service;  // Informació del servei
 }
+
+export interface ReservationData {
+  worker_dni: string | null;
+  client_dni: string | null;
+  service_id: number | null;
+  date: Date | null;
+  hour: string;
+  status: string;
+  shift_id?: number | null;
+}
+
 
 export interface User {
   dni: string;       // DNI del treballador

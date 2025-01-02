@@ -13,58 +13,49 @@ export default function ClientList({ clients }: ClientListProps) {
     (client) =>
       client.name.toLowerCase().includes(filter.toLowerCase()) ||
       client.surname.toLowerCase().includes(filter.toLowerCase()) ||
-      client.dni.toLowerCase().includes(filter.toLowerCase()) ||
-      client.telf.toLowerCase().includes(filter.toLowerCase()) ||
-      client.email.toLowerCase().includes(filter.toLowerCase())
+      client.dni.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
     <div className="p-4">
+      {/* Filtre */}
       <div className="mb-4">
         <label htmlFor="filter" className="block text-sm font-medium text-gray-700">
           Filtrar clients
         </label>
         <input
-          type="text"
-          id="filter"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Cercar per nom, cognom, DNI, etc."
-          className="mt-1 block w-full rounded-md border border-gray-300 p-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+  type="text"
+  id="filter"
+  value={filter}
+  onChange={(e) => setFilter(e.target.value)}
+  placeholder="Cercar per nom, cognom, DNI, etc."
+  className="mt-1 block w-full rounded-md border bg-red-japan text-white-japan p-2 shadow-sm placeholder-white-japan"
+/>
       </div>
-      <div className="overflow-x-auto">
-        <table className="min-w-full bg-white border border-gray-300 text-black">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 border-b">Nom</th>
-              <th className="px-4 py-2 border-b">Cognom</th>
-              <th className="px-4 py-2 border-b">DNI</th>
-              <th className="px-4 py-2 border-b">Telèfon</th>
-              <th className="px-4 py-2 border-b">Correu electrònic</th>
-              <th className="px-4 py-2 border-b">Accions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredClients?.map((client) => (
-              <tr key={client.dni} className="hover:bg-gray-100 text-black">
-                <td className="px-4 py-2 border-b">{client.name}</td>
-                <td className="px-4 py-2 border-b">{client.surname}</td>
-                <td className="px-4 py-2 border-b">{client.dni}</td>
-                <td className="px-4 py-2 border-b">{client.telf}</td>
-                <td className="px-4 py-2 border-b">{client.email}</td>
-                <td className="px-4 py-2 border-b">
-                  <Link
-                    to={`../clients/${client.dni}`}
-                    className="transform text-xl text-blue-500 transition-transform hover:scale-125 hover:text-blue-700"
-                  >
-                    ✏️
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Llista de clients */}
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
+        style={{ maxHeight: "400px" }}
+      >
+        {filteredClients?.map((client) => (
+          <div
+            key={client.dni}
+            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-3 mx-1 hover:bg-red-japan"
+          >
+            <h2 className="text-lg font-bold text-white-japan">
+              {client.name} {client.surname}
+            </h2>
+            <p className="text-sm text-white-japan">DNI: {client.dni}</p>
+            <div className="mt-4 text-right">
+              <Link
+                to={`../clients/${client.dni}`}
+                className="text-white-japan hover:text-blue-700 text-sm font-semibold"
+              >
+                Editar ✏️
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
