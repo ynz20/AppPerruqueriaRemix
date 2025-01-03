@@ -38,14 +38,14 @@ export default function ReservationsPage() {
   return (
     <>
       <Outlet />
-      <div className="p-6">
+      <div className="">
         <Link
           to="add"
           className="flex items-center rounded bg-gray-100 p-2 text-blue-500 shadow-md hover:text-blue-700"
         >
           <span className="ml-2">Afegir Reserva</span>
         </Link>
-        <h1 className="text-2xl font-bold mb-4 text-black">
+        <h1 className="text-2xl font-bold  text-black">
           Llista de Reserves
         </h1>
         <ReservationList reservations={reservations} />
