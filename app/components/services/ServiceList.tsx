@@ -1,42 +1,66 @@
 import { Link } from "@remix-run/react";
 import { Service } from "~/types/interfaces";
+import { useState } from "react";
 
 interface ServiceListProps {
   services: Service[] | undefined;
 }
 
 export default function ServiceList({ services }: ServiceListProps) {
+  const [filter, setFilter] = useState<string>("");
+
+  const filteredServices = services?.filter(
+    (service) =>
+      service.name.toLowerCase().includes(filter.toLowerCase()) ||
+      service.description.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300 text-black">
-        <thead>
-          <tr>
-            <th className="px-4 py-2 border-b">Nom</th>
-            <th className="px-4 py-2 border-b">Descripció</th>
-            <th className="px-4 py-2 border-b">Preu</th>
-            <th className="px-4 py-2 border-b">Estimació</th>
-            <th className="px-4 py-2 border-b">Accions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {services?.map((service) => (
-            <tr key={service.id} className="hover:bg-gray-100 text-black">
-              <td className="px-4 py-2 border-b">{service.name}</td>
-              <td className="px-4 py-2 border-b">{service.description}</td>
-              <td className="px-4 py-2 border-b">{service.price}€</td>
-              <td className="px-4 py-2 border-b">{service.estimation} minuts</td>
-              <td className="px-4 py-2 border-b">
-                <Link
-                  to={`../services/${service.id}`}
-                  className="transform text-xl text-blue-500 transition-transform hover:scale-125 hover:text-blue-700"
-                >
-                  ✏️
-                </Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="p-4">
+      {/* Filtro */}
+      <div className="mb-4">
+        <label
+          htmlFor="filter"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Filtrar serveis
+        </label>
+        <input
+          type="text"
+          id="filter"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Cercar per nom o descripció"
+          className="mt-1 block w-full rounded-md border bg-red-japan text-white-japan p-2 shadow-sm placeholder-white-japan"
+        />
+      </div>
+      {/* Lista de servicios */}
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
+        style={{ maxHeight: "400px" }}
+      >
+        {filteredServices?.map((service) => (
+          <div
+            key={service.id}
+            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 mx-1 hover:bg-red-japan"
+          >
+            <h2 className="text-lg font-bold text-white-japan">{service.name}</h2>
+            <p className="text-sm text-white-japan mb-6">{service.description}</p>
+            <p className="text-sm text-white-japan font-bold">Preu: {service.price}€</p>
+            <p className="text-sm text-white-japan font-bold">
+              Estimació: {service.estimation} minuts
+            </p>
+            <div className="mt-4 text-right">
+              <Link
+                to={`../services/${service.id}`}
+                className="text-white-japan hover:text-black-japan text-sm font-semibold"
+              >
+                Editar ✏️
+              </Link>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

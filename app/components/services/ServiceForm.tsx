@@ -38,16 +38,20 @@ const ServicesForm: React.FC = () => {
     <Form
       method={serviceData.id ? "put" : "post"}
       action={serviceData.id ? `/services/${serviceData.id}` : "/services/add"}
-      className="flex flex-col rounded-lg bg-gray-100 p-6 shadow-md"
+      className="flex flex-col rounded-lg bg-white-japan p-6 shadow-lg border border-gray-200"
       id="services-form"
     >
       {serviceData.id && (
         <input type="hidden" name="id" value={serviceData.id} />
       )}
-      <p className="mb-4">
+      <h1 className="text-2xl font-bold text-red-japan mb-6">
+        {serviceData.id ? "Edita Servei" : "Afegeix Servei"}
+      </h1>
+
+      <div className="mb-4">
         <label
           htmlFor="name"
-          className="mb-2 block font-semibold text-gray-700"
+          className="mb-2 block text-sm font-medium text-gray-600"
         >
           Nom del servei
         </label>
@@ -58,14 +62,15 @@ const ServicesForm: React.FC = () => {
           required
           defaultValue={serviceData.name}
           maxLength={100}
-          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm  focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+          placeholder="Nom del servei"
         />
-      </p>
+      </div>
 
-      <p className="mb-4">
+      <div className="mb-4">
         <label
           htmlFor="description"
-          className="mb-2 block font-semibold text-gray-700"
+          className="mb-2 block text-sm font-medium text-gray-600"
         >
           Descripció
         </label>
@@ -76,14 +81,15 @@ const ServicesForm: React.FC = () => {
           defaultValue={serviceData.description}
           maxLength={255}
           rows={3}
-          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm  focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+          placeholder="Escriu una descripció del servei"
         />
-      </p>
+      </div>
 
-      <p className="mb-4">
+      <div className="mb-4">
         <label
           htmlFor="price"
-          className="mb-2 block font-semibold text-gray-700"
+          className="mb-2 block text-sm font-medium text-gray-600"
         >
           Preu
         </label>
@@ -95,14 +101,15 @@ const ServicesForm: React.FC = () => {
           defaultValue={serviceData.price}
           step="0.01"
           min="0"
-          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm  focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+          placeholder="Exemple: 50.00"
         />
-      </p>
+      </div>
 
-      <p className="mb-4">
+      <div className="mb-4">
         <label
           htmlFor="estimation"
-          className="mb-2 block font-semibold text-gray-700"
+          className="mb-2 block text-sm font-medium text-gray-600"
         >
           Estimació (Minuts)
         </label>
@@ -112,27 +119,31 @@ const ServicesForm: React.FC = () => {
           name="estimation"
           required
           defaultValue={serviceData.estimation}
-          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+          placeholder="Exemple: 30"
         />
-      </p>
+      </div>
 
       {validationErrors && (
-        <ul className="mb-4 list-inside list-disc text-red-500">
+        <ul className="mb-4 list-inside list-disc text-sm text-red-500">
           {Object.values(validationErrors).map((error: string) => (
             <li key={error}>{error}</li>
           ))}
         </ul>
       )}
 
-      <div className="form-actions flex items-center justify-between">
+      <div className="flex items-center justify-between mt-6">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="rounded-md bg-red-japan px-6 py-3 text-sm font-medium text-white hover:bg-black-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
-          {isSubmitting ? "Saving..." : "Submit"}
+          {isSubmitting ? "Guardant..." : "Desar"}
         </button>
-        <Link className="text-indigo-500 hover:underline" to="..">
+        <Link
+          to=".."
+          className="text-sm font-medium text-gray-500 hover:text-red-japan focus:outline-none focus:underline"
+        >
           Cancel·la
         </Link>
       </div>
