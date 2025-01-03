@@ -49,9 +49,12 @@ const ReservationsForm: React.FC = () => {
             </option>
           ))}
         </select>
+        {validationErrors?.client && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.client}</p>
+        )}
       </div>
 
-      {/* Servei */}
+      {/* Service */}
       <div className="mb-4">
         <label
           htmlFor="service"
@@ -72,9 +75,12 @@ const ReservationsForm: React.FC = () => {
             </option>
           ))}
         </select>
+        {validationErrors?.service && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.service}</p>
+        )}
       </div>
 
-      {/* Treballador */}
+      {/* Worker */}
       <div className="mb-4">
         <label
           htmlFor="worker"
@@ -95,9 +101,12 @@ const ReservationsForm: React.FC = () => {
             </option>
           ))}
         </select>
+        {validationErrors?.worker && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.worker}</p>
+        )}
       </div>
 
-      {/* Hora */}
+      {/* Hour */}
       <div className="mb-4">
         <label
           htmlFor="hour"
@@ -112,9 +121,12 @@ const ReservationsForm: React.FC = () => {
           required
           className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
+        {validationErrors?.hour && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.hour}</p>
+        )}
       </div>
 
-      {/* Dia */}
+      {/* Day */}
       <div className="mb-4">
         <label
           htmlFor="day"
@@ -129,14 +141,40 @@ const ReservationsForm: React.FC = () => {
           required
           className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
+        {validationErrors?.day && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.day}</p>
+        )}
       </div>
 
       {validationErrors && (
-        <ul className="mb-4 list-inside list-disc text-sm text-red-500">
-          {Object.values(validationErrors).map((error: string) => (
-            <li key={error}>{error}</li>
-          ))}
-        </ul>
+        <div className="mb-4 p-4 bg-red-100 border border-red-500 rounded-md">
+          <div className="flex items-center mb-2">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-red-500 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span className="text-lg font-semibold text-red-500">
+              Error
+            </span>
+          </div>
+          <ul className="list-inside list-disc text-sm text-red-700">
+            {Object.values(validationErrors).map((error: string, index) => (
+              <li key={index} className="mb-1">
+                {error}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
 
       <div className="flex items-center justify-between mt-6">
