@@ -1,4 +1,10 @@
-import { Form, useLoaderData, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  useLoaderData,
+  useActionData,
+  useNavigation,
+  Link,
+} from "@remix-run/react";
 import React from "react";
 
 interface ValidationErrors {
@@ -17,22 +23,24 @@ const ReservationsForm: React.FC = () => {
   }>();
 
   return (
-    console.log(clients, services, workers),
     <Form
       method="post"
       action="/reservations/add"
-      className="flex flex-col rounded-lg bg-gray-100 p-6 shadow-md"
+      className="flex flex-col rounded-lg bg-white-japan p-6 shadow-lg border border-gray-200"
     >
       {/* Client */}
       <div className="mb-4">
-        <label htmlFor="client" className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor="client"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Client
         </label>
         <select
           id="client"
           name="client"
           required
-          className="w-full border rounded py-2 px-3"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           <option value="">Selecciona un client</option>
           {clients.map((client) => (
@@ -45,14 +53,17 @@ const ReservationsForm: React.FC = () => {
 
       {/* Servei */}
       <div className="mb-4">
-        <label htmlFor="service" className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor="service"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Servei
         </label>
         <select
           id="service"
           name="service"
           required
-          className="w-full border rounded py-2 px-3"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           <option value="">Selecciona un servei</option>
           {services.map((service) => (
@@ -65,14 +76,17 @@ const ReservationsForm: React.FC = () => {
 
       {/* Treballador */}
       <div className="mb-4">
-        <label htmlFor="worker" className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor="worker"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Treballador
         </label>
         <select
           id="worker"
           name="worker"
           required
-          className="w-full border rounded py-2 px-3"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           <option value="">Selecciona un treballador</option>
           {workers.map((worker) => (
@@ -85,7 +99,10 @@ const ReservationsForm: React.FC = () => {
 
       {/* Hora */}
       <div className="mb-4">
-        <label htmlFor="hour" className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor="hour"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Hora
         </label>
         <input
@@ -93,13 +110,16 @@ const ReservationsForm: React.FC = () => {
           id="hour"
           name="hour"
           required
-          className="w-full border rounded py-2 px-3"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
       </div>
 
       {/* Dia */}
       <div className="mb-4">
-        <label htmlFor="day" className="block text-gray-700 text-sm font-bold mb-2">
+        <label
+          htmlFor="day"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Dia
         </label>
         <input
@@ -107,26 +127,32 @@ const ReservationsForm: React.FC = () => {
           id="day"
           name="day"
           required
-          className="w-full border rounded py-2 px-3"
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
       </div>
 
       {validationErrors && (
-        <ul className="mb-4 list-inside list-disc text-red-500">
+        <ul className="mb-4 list-inside list-disc text-sm text-red-500">
           {Object.values(validationErrors).map((error: string) => (
             <li key={error}>{error}</li>
           ))}
         </ul>
       )}
 
-      <div className="form-actions flex items-center justify-between">
+      <div className="flex items-center justify-between mt-6">
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-md bg-indigo-500 px-4 py-2 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="rounded-md bg-red-japan px-6 py-3 text-sm font-medium text-white hover:bg-black-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           {isSubmitting ? "Guardant..." : "Enviar"}
         </button>
+        <Link
+          to=".."
+          className="text-sm font-medium text-gray-500 hover:text-red-japan focus:outline-none focus:underline"
+        >
+          Cancel·la
+        </Link>
       </div>
     </Form>
   );

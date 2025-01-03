@@ -6,7 +6,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import caLocale from "@fullcalendar/core/locales/ca"; // Idioma Català
 
 interface ReservationCalendarProps {
-  reservations: Reservation[];
+  reservations: Reservation[]; // Propietat per a les reserves
 }
 
 const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
@@ -15,8 +15,8 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
   // Mapegem les reserves als esdeveniments de FullCalendar
   const events = reservations.map((reservation) => ({
     title: `${reservation.service_id} - ${reservation.user.name} ${reservation.user.surname}`,
-    start: `${reservation.date}T${reservation.hour}`, // Concatenar data i hora
-    end: `${reservation.date}T${reservation.hour}`, // Si les reserves no tenen durada, podem posar el mateix valor
+    start: `${reservation.date}T${reservation.hour}`, // Concatenem data i hora
+    end: `${reservation.date}T${reservation.hour}`, // Si les reserves no tenen durada, utilitzem la mateixa hora
     description: `Client: ${reservation.client.name} ${reservation.client.surname}`,
     status: reservation.status,
     clientName: `${reservation.client.name} ${reservation.client.surname}`,
@@ -29,7 +29,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
   const getEventClass = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-500 text-white"; // Color verd per confirmada
+        return "bg-green-400 text-white"; // Color verd per confirmada
       case "pending":
         return "bg-yellow-500 text-white"; // Color groc per pendent
       case "cancelled":
@@ -85,49 +85,51 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
     >
       <style>
         {`
+        .fc-col-header {
+          background-color: #8A0303; /* Fondo dels titols dels dies de la setmana*/
+        }
+        
+        .fc-scrollgrid-section-body td,
+        .fc-scrollgrid-section-body th {
+          border-color: black; /* Color de les línies del calendari */
+        }
+        .fc-scrollgrid {
+          border-color: black; /* Color dels bordes del calendari */
+        }
 
         .fc-daygrid-day-number {
           color: #8A0303;
           font-weight: bold;
         }
-        .fc-daygrid-day:hover .fc-daygrid-day-number {
-          color: #2D2D2D;
-        }
-
 
         .fc-toolbar-title {
           color: #8A0303;
           font-weight: bold;
         }
 
-      
         .fc-button-group .fc-button {
-          background-color: #F3E5AB; /* Color de fondo de los botones */
-          color: #8A0303; /* Color del texto */
+          background-color: #F3E5AB; /* Color de fons dels botons */
+          color: #8A0303; /* Color del text */
           border: 1px solid #8A0303; /* Bordes */
-          border-radius: 5px; /* Bordes redondeados */
+          border-radius: 5px; /* Bordes arrodonits */
         }
 
-  
-          background-color: #8A0303; /* Fondo al hacer hover */
-          color: #FFFFFF; /* Texto blanco */
+        .fc-button-group .fc-button:hover {
+          background-color: #8A0303; /* Fons al passar el ratolí */
+          color: #FFFFFF; /* Text blanc */
         }
 
-        /* Cambiar el color del botón activo */
+        /* Canviar el color del botó actiu */
         .fc-button-group .fc-button.fc-button-active {
-          background-color: #8A0303; /* Fondo activo */
-          color: #FFFFFF; /* Texto blanco */
-          font-weight: bold; /* Negrita para destacar */
+          background-color: #8A0303; /* Fons actiu */
+          color: #FFFFFF; /* Text blanc */
+          font-weight: bold; /* Negrita per destacar */
         }
 
         .fc-today-button {
-          background-color: #FFE4B5; /* Fondo especial para 'Hoy' */
+          background-color: #FFE4B5; /* Fons especial per 'Avui' */
           color: #8A0303;
         }
-
-  
-
-
       `}
       </style>
       <FullCalendar
@@ -153,7 +155,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           center: "title",
           right: "dayGridMonth,dayGridWeek,dayGridDay",
         }}
-        locale={caLocale}
+        locale={caLocale} // Configuració per a l'idioma català
       />
     </div>
   );
