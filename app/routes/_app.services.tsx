@@ -43,7 +43,7 @@ export default function ServicesPage() {
           <h1 className="text-2xl font-bold mb-4 text-black">Serveis</h1>
           <Link
             to="add"
-            className="flex items-center rounded bg-gray-100 p-2 text-blue-500 shadow-md hover:text-blue-700"
+            className="inline-flex items-center  rounded bg-red-japan px-2 py-2 text-white-japan shadow-md hover:text-yellow-japan"
           >
             <span className="ml-2">Afegir Servei</span>
           </Link>
