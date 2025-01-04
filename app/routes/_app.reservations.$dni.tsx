@@ -28,6 +28,6 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   } catch (error) {
     console.error(error);
-    throw new Response("Error al carregar el client.", { status: 500 });
+    throw new Response("Error al carregar les reserves del client.", { status: 500 });
   }
 }
