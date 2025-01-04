@@ -1,4 +1,4 @@
-import { Link } from "@remix-run/react";
+import { Link, useFetcher } from "@remix-run/react";
 import { Client } from "~/types/interfaces";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ interface ClientListProps {
 
 export default function ClientList({ clients }: ClientListProps) {
   const [filter, setFilter] = useState<string>("");
+  const fetcher = useFetcher();
 
   const filteredClients = clients?.filter(
     (client) =>
@@ -49,13 +50,29 @@ export default function ClientList({ clients }: ClientListProps) {
               {client.name} {client.surname}
             </h2>
             <p className="text-sm text-white-japan">DNI: {client.dni}</p>
-            <div className="mt-4 text-right">
+            <div className="mt-4 flex justify-between items-center">
               <Link
                 to={`../clients/${client.dni}`}
-                className="text-white-japan hover:text-blue-700 text-sm font-semibold"
+                className="text-white-japan hover:text-blue-700 text-sm font-semibold flex items-center space-x-1"
               >
-                Editar ✏️
+                ✏️ <span>Editar</span>
               </Link>
+              <Link
+                to={`../reservations/${client.dni}/historial`}
+                className="text-white-japan hover:text-green-500 text-sm font-semibold flex items-center space-x-1"
+              >
+                📜 <span>Historial</span>
+              </Link>
+              <fetcher.Form method="post" action={`/clients/${client.dni}`}>
+                <input type="hidden" name="_method" value="delete" />
+                <input type="hidden" name="dni" value={client.dni} />
+                <button
+                  type="submit"
+                  className="text-white-japan hover:text-red-500 text-sm font-semibold flex items-center space-x-1"
+                >
+                  🗑️ <span>Eliminar</span>
+                </button>
+              </fetcher.Form>
             </div>
           </div>
         ))}
