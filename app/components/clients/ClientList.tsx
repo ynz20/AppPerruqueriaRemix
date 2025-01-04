@@ -58,7 +58,7 @@ export default function ClientList({ clients }: ClientListProps) {
                 ✏️ <span>Editar</span>
               </Link>
               <Link
-                to={`../reservations/${client.dni}/historial`}
+                to={`../reservations/${client.dni}`}
                 className="text-white-japan hover:text-green-500 text-sm font-semibold flex items-center space-x-1"
               >
                 📜 <span>Historial</span>
