@@ -74,6 +74,14 @@ export default function Layout() {
               </li>
               <li>
                 <Link
+                  to="/workers"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
+                >
+                  Treballadors
+                </Link>
+              </li>
+              <li>
+                <Link
                   to="/history"
                   className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
