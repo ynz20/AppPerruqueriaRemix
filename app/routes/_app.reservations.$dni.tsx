@@ -12,6 +12,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   try {
     const response = await fetch(`http://localhost:8085/api/reservations/client/${dni}`, {
+      method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
