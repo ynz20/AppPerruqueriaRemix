@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     const data = await response.json();
-    return json(data);
+    return json({ reservations: data.reservations, token });
   } catch (err) {
     throw new Response("Error en carregar les reserves. Intenta-ho més tard.", {
       status: 500,
@@ -34,10 +34,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function ReservationsPage() {
-  const { reservations } = useLoaderData<{ reservations: Reservation[] }>();
+  const { reservations, token } = useLoaderData<{ reservations: Reservation[];
+  token: string }
+    >();
   return (
     <>
-      <Outlet />
+      <Outlet context={{ token}} />
       <div className="">
         <Link
           to="add"
