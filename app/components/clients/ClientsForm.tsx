@@ -29,7 +29,7 @@ const ClientsForm: React.FC = () => {
     <Form
       method={clientData.dni ? "put" : "post"}
       action={clientData.dni ? `/clients/${clientData.dni}` : "/clients/add"}
-      className="flex flex-col rounded-lg bg-gray-100 p-6 shadow-md"
+      className="flex flex-col rounded-lg bg-white-japan p-6 p-6 shadow-md"
       id="clients-form"
     >
       <p className="mb-4">
@@ -53,7 +53,7 @@ const ClientsForm: React.FC = () => {
       <p className="mb-4">
         <label
           htmlFor="name"
-          className="mb-2 block font-semibold text-gray-700"
+          className="mb-2 block font-semibold text-gray-600"
         >
           Nom
         </label>
@@ -64,7 +64,7 @@ const ClientsForm: React.FC = () => {
           required
           defaultValue={clientData.name}
           maxLength={50}
-          className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full rounded-md border border-gray-300 text-white-japan p-2 focus:border-red-japan  focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
       </p>
 

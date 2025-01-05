@@ -34,21 +34,43 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function ReservationsPage() {
-  const { reservations, token } = useLoaderData<{ reservations: Reservation[];
-  token: string }
-    >();
+  const { reservations, token } = useLoaderData<{ reservations: Reservation[]; token: string }>();
+
+  // Funció per recarregar les reserves
+  const refreshReservations = async () => {
+    try {
+      const response = await fetch("http://localhost:8085/api/reservations", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error en carregar les reserves.");
+      }
+
+      const data = await response.json();
+      // Actualitza les reserves amb les dades més recents
+      return data.reservations;
+    } catch (error) {
+      console.error("Error en obtenir les reserves:", error);
+    }
+  };
+
   return (
     <>
-      <Outlet context={{ token}} />
-      <div className="">
+      <Outlet context={{ token, refreshReservations }} />
+      <div>
         <Link
           to="add"
           className="inline-flex items-center rounded bg-red-japan px-4 py-2 text-white-japan shadow-md hover:text-yellow-japan"
         >
           <span className="ml-2">Afegir Reserva</span>
         </Link>
-        <h1 className="text-2xl font-bold  text-black">Llista de Reserves</h1>
-        <ReservationList reservations={reservations} />
+        <h1 className="text-2xl font-bold text-black">Llista de Reserves</h1>
+        <ReservationList reservations={reservations} token={token} refreshReservations={refreshReservations} />
       </div>
     </>
   );
