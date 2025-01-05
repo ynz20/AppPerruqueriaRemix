@@ -29,7 +29,7 @@ const ClientsForm: React.FC = () => {
     <Form
       method={clientData.dni ? "put" : "post"}
       action={clientData.dni ? `/clients/${clientData.dni}` : "/clients/add"}
-      className="flex flex-col rounded-lg bg-white-japan p-6 p-6 shadow-md"
+      className="flex flex-col rounded-lg bg-white-japan p-6 shadow-md"
       id="clients-form"
     >
       <p className="mb-4">
