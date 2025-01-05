@@ -34,7 +34,7 @@ export const loader = async ({ request }: { request: Request }) => {
 };
 
 export default function ReservationsAddPage() {
-  const [error, setError] = useState<string | null>(null); // Estado para el error
+  const [error, setError] = useState<string | null>(null); // Estat per a l'error
   const navigate = useNavigate();
 
   function closeHandler() {
@@ -42,7 +42,7 @@ export default function ReservationsAddPage() {
   }
 
   function handleError(message: string) {
-    setError(message); // Establece el error recibido del servidor
+    setError(message); // Estableix l'error rebut del servidor
   }
 
   return (
@@ -71,14 +71,14 @@ export async function action({ request }: { request: Request }) {
   console.log("hora", hour);
 
   if (!hour || !/^([01]\d|2[0-3]):([0-5]\d)$/.test(hour)) {
-    throw new Error("Hora no válida. Usa el formato HH:mm");
+    throw new Error("Hora no vàlida. Usa el format HH:mm");
   }
 
   const reservationData = {
     client_dni: formData.get("client") as string,
     service_id: parseInt(formData.get("service") as string),
     worker_dni: formData.get("worker") as string,
-    hour, // Hora ya validada
+    hour, // Hora ja validada
     date: new Date(formData.get("day") as string).toISOString().split("T")[0],
     shift_id: 1,
     status: "pending",
@@ -92,5 +92,6 @@ export async function action({ request }: { request: Request }) {
     return { errorMessage };
   }
 
+  // Redirigeix per refrescar la pàgina de reserves
   return redirect("/reservations");
 }
