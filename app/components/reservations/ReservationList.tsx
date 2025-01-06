@@ -43,10 +43,6 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
     end: `${reservation.date}T${reservation.hour}`,
     description: `Client: ${reservation.client.name} ${reservation.client.surname}`,
     status: reservation.status,
-    clientName: `${reservation.client.name} ${reservation.client.surname}`,
-    userName: `${reservation.user.name} ${reservation.user.surname}`,
-    hour: reservation.hour,
-    service: reservation.service.name,
     extendedProps: {
       id: reservation.id.toString(),
       clientName: `${reservation.client.name} ${reservation.client.surname}`,
@@ -54,7 +50,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       status: reservation.status,
       hour: reservation.hour,
       service: reservation.service.name,
-      token: token, // Utilitzem el token aquí
+      token, // Utilitzem el token aquí
     },
   }));
 
@@ -75,8 +71,6 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
     setSelectedReservation(info.event.extendedProps);
     setModalOpen(true);
   };
-
- 
 
   return (
     <div
@@ -128,6 +122,14 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           background-color: #FFE4B5;
           color: #8A0303;
         }
+        @media (max-width: 768px) {
+          .fc-toolbar.fc-header-toolbar {
+            flex-wrap: wrap;
+          }
+          .fc-toolbar .fc-toolbar-chunk {
+            margin-bottom: 10px;
+          }
+        }
       `}
       </style>
       <FullCalendar
@@ -145,6 +147,11 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           right: "dayGridMonth,dayGridWeek,dayGridDay",
         }}
         locale={caLocale}
+        views={{
+          dayGridMonth: { buttonText: "Mes" },
+          dayGridWeek: { buttonText: "Setmana" },
+          dayGridDay: { buttonText: "Dia" },
+        }}
       />
 
       <ReservationModal
