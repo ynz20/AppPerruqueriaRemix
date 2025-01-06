@@ -34,7 +34,6 @@ export default function ServiceList({ services }: ServiceListProps) {
           className="mt-1 block w-full rounded-md border bg-red-japan text-white-japan p-2 shadow-sm placeholder-white-japan"
         />
       </div>
-      {/* Lista de servicios */}
       <div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
         style={{ maxHeight: "400px" }}
