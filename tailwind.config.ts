@@ -9,6 +9,7 @@ export default {
         "white-japan": "#F3F2E0",
         "red-japan": "#8A0303",
         "yellow-japan": "#FFD166",
+        "green-japan": "#607E42",
       },
       fontFamily: {
         sans: [
