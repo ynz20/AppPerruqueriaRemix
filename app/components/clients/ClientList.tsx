@@ -1,10 +1,9 @@
 import { Link, useFetcher } from "@remix-run/react";
-import { Client } from "~/types/interfaces";
+// import { Client } from "~/types/interfaces";
+import { ClientListProps } from "~/types/interfaces";
 import { useState } from "react";
 
-interface ClientListProps {
-  clients: Client[] | undefined;
-}
+
 
 export default function ClientList({ clients }: ClientListProps) {
   const [filter, setFilter] = useState<string>("");
@@ -58,7 +57,7 @@ export default function ClientList({ clients }: ClientListProps) {
                 ✏️ <span>Editar</span>
               </Link>
               <Link
-                to={`../reservations/${client.dni}`}
+                to={`../client/reservations/${client.dni}`}
                 className="text-white-japan hover:text-green-500 text-sm font-semibold flex items-center space-x-1"
               >
                 📜 <span>Historial</span>

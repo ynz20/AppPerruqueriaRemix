@@ -1,10 +1,8 @@
 import { Link } from "@remix-run/react";
-import { Service } from "~/types/interfaces";
+import { ServiceListProps } from "~/types/interfaces";
 import { useState } from "react";
 
-interface ServiceListProps {
-  services: Service[] | undefined;
-}
+
 
 export default function ServiceList({ services }: ServiceListProps) {
   const [filter, setFilter] = useState<string>("");

@@ -1,9 +1,8 @@
 import { json, LoaderFunction } from "@remix-run/node";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import ClientsHistory from "~/components/clients/ClientsHistory";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import { Reservation } from "~/types/interfaces";
-import Modal from "~/components/utils/Modal";
 
 interface LoaderData {
   reservations: Reservation[];
@@ -41,17 +40,20 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
 export default function ReservationsClientPage() {
   const { reservations } = useLoaderData<LoaderData>();
-    const navigate = useNavigate();
-    
-    function closeHandler() {
-        navigate('..');
-    }
+
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold text-center mb-4">Reserves del Client</h2>
-      <Modal onClose={closeHandler}>
+    <>
+      <Link
+        to="../clients"
+        className="inline-flex items-center rounded bg-red-japan px-4 py-2 text-white-japan shadow-md hover:text-yellow-japan"
+      >
+        <span>Tornar Enrere</span>
+      </Link>
+      <div className="p-4">
+        <h2 className="text-xl font-bold text-center mb-4">Reserves del Client</h2>
         <ClientsHistory reservations={reservations} />
-      </Modal>
-    </div>
+      </div>
+    </>
   );
 }
+

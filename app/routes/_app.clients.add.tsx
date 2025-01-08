@@ -22,6 +22,11 @@ export default function ClientsAddPage() {
 export const action: ActionFunction = async ({ request }) => {
     const formData = await request.formData();
     const token = await getTokenFromRequest(request);
+
+    if (!token) {
+        throw new Error("Inicia sessió per accedir.");
+      }
+
     const clientData = {
         dni: formData.get('dni') as string,
         name: formData.get('name') as string,
@@ -31,6 +36,6 @@ export const action: ActionFunction = async ({ request }) => {
     };
 
     await addClient(clientData, token);
-    
+
     return redirect("/clients");
 }

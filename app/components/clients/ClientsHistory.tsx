@@ -12,7 +12,6 @@ const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations }) => {
 
   return (
     <div>
-      <h1 className="text-xl font-bold text-center mb-4">Reserves Client</h1>
       <ul className="space-y-4">
         {reservations.map((reservation) => (
           <li
