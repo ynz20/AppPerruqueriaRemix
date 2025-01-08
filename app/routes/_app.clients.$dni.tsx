@@ -3,6 +3,7 @@ import Modal from "../components/utils/Modal";
 import ClientsForm from "~/components/clients/ClientsForm";
 import { deleteClient, updateClient } from "~/data/client.server";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
+import type { ActionFunction } from "@remix-run/node";
 
 
 export default function ClientsAddPage() {
@@ -19,7 +20,9 @@ export default function ClientsAddPage() {
     )
 }
 
-export async function action({ request }) {
+
+
+export const action: ActionFunction = async ({ request }) => {
     const token = await getTokenFromRequest(request);
     const formData = await request.formData();
     const method = formData.get("_method") || request.method;

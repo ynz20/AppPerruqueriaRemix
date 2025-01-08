@@ -51,9 +51,7 @@ export async function getServices(token: string) {
     const data = await response.json();
     return json(data);
   } catch (err) {
-    throw new Response("Error en carregar els serveis. Intenta-ho més tard.", {
-      status: 500,
-    });
+    throw new Error("Error en carregar els serveis. Intenta-ho més tard.");
   }
 }
 
@@ -70,4 +68,9 @@ export async function updateService(serviceData: Service, token: string) {
     },
     body: JSON.stringify(serviceData),
   });
+
+  
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: ${response.statusText}`);
+  }
 }

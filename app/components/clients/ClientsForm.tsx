@@ -1,10 +1,7 @@
 import { Form, Link, useActionData, useMatches, useNavigation, useParams } from "@remix-run/react";
 import React from "react";
-import { Client } from "~/types/interfaces";
+import { Client, ValidationErrors } from "~/types/interfaces";
 
-interface ValidationErrors {
-  [key: string]: string;
-}
 
 const ClientsForm: React.FC = () => {
   const navigation = useNavigation();
