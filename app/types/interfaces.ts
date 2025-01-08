@@ -68,3 +68,11 @@ export interface User {
   role: boolean;      // Rol del treballador
 }
 
+export interface Product{
+  id:number // Id del producte
+  name: string;  // Nom del producte
+  description: string; // Descripció del producte
+  price: number;
+  stock: number;
+}
+
