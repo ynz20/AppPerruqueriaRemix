@@ -1,10 +1,14 @@
 // ReservationsForm.tsx
 import React, { useState } from "react";
-import { Form, useActionData, useNavigation, Link, useLoaderData, useOutletContext } from "@remix-run/react";
+import {
+  Form,
+  useActionData,
+  useNavigation,
+  Link,
+  useLoaderData,
+  useOutletContext,
+} from "@remix-run/react";
 import useAvailableWorkers from "~/routes/useAvailableWorkers";
-
-
-
 
 interface ValidationErrors {
   [key: string]: string;
@@ -28,7 +32,12 @@ const ReservationsForm: React.FC = () => {
   const [selectedService, setSelectedService] = useState("");
 
   // Usar el custom hook
-  const { workers, error } = useAvailableWorkers(token, selectedDate, selectedHour, selectedService);
+  const { workers, error } = useAvailableWorkers(
+    token,
+    selectedDate,
+    selectedHour,
+    selectedService
+  );
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedDate(e.target.value);
@@ -50,7 +59,10 @@ const ReservationsForm: React.FC = () => {
     >
       {/* Client */}
       <div className="mb-4">
-        <label htmlFor="client" className="mb-2 block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="client"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Client
         </label>
         <select
@@ -73,7 +85,10 @@ const ReservationsForm: React.FC = () => {
 
       {/* Service */}
       <div className="mb-4">
-        <label htmlFor="service" className="mb-2 block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="service"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Servei
         </label>
         <select
@@ -91,13 +106,18 @@ const ReservationsForm: React.FC = () => {
           ))}
         </select>
         {validationErrors?.service && (
-          <p className="mt-1 text-xs text-red-500">{validationErrors.service}</p>
+          <p className="mt-1 text-xs text-red-500">
+            {validationErrors.service}
+          </p>
         )}
       </div>
 
       {/* Date */}
       <div className="mb-4">
-        <label htmlFor="day" className="mb-2 block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="day"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Dia
         </label>
         <input
@@ -115,7 +135,10 @@ const ReservationsForm: React.FC = () => {
 
       {/* Hour */}
       <div className="mb-4">
-        <label htmlFor="hour" className="mb-2 block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="hour"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Hora
         </label>
         <input
@@ -133,7 +156,10 @@ const ReservationsForm: React.FC = () => {
 
       {/* Worker */}
       <div className="mb-4">
-        <label htmlFor="worker" className="mb-2 block text-sm font-medium text-gray-600">
+        <label
+          htmlFor="worker"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
           Treballador
         </label>
         <select
