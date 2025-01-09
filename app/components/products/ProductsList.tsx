@@ -8,7 +8,11 @@ interface ProductListProps {
 }
 
 export default function ProductList({ products, token }: ProductListProps) {
-  const [filter, setFilter] = useState<string>(""); 
+  const [filter, setFilter] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const ITEMS_PER_PAGE = 4;
+
   const fetcher = useFetcher();
 
   const filteredProducts = Array.isArray(products)
@@ -18,6 +22,21 @@ export default function ProductList({ products, token }: ProductListProps) {
           product.description.toLowerCase().includes(filter.toLowerCase())
       )
     : [];
+
+  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   return (
     <div className="p-4">
@@ -38,23 +57,19 @@ export default function ProductList({ products, token }: ProductListProps) {
           className="mt-1 block w-full rounded-md border bg-red-japan text-white-japan p-2 shadow-sm placeholder-white-japan"
         />
       </div>
+
       {/* Llista de productes */}
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 overflow-y-auto"
-        style={{ maxHeight: "400px" }} 
-      >
-        {filteredProducts?.map((product) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {paginatedProducts.map((product) => (
           <div
             key={product.id}
-            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 mx-1 "
+            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 mx-1"
           >
             <h2 className="text-lg font-bold text-white-japan">
               {product.name}
             </h2>
             <p className="text-sm text-white-japan">{product.description}</p>
-            <p className="text-sm text-white-japan">
-              Preu: {product.price}€
-            </p>
+            <p className="text-sm text-white-japan">Preu: {product.price}€</p>
 
             {/* Estoc: Millorat visualment */}
             <div className="flex items-center space-x-3 text-white mt-4">
@@ -135,6 +150,35 @@ export default function ProductList({ products, token }: ProductListProps) {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Paginació */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded-md text-white ${
+            currentPage === 1
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-japan hover:bg-black-japan"
+          }`}
+        >
+          Anterior
+        </button>
+        <span className="text-white">
+          Pàgina {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded-md text-white ${
+            currentPage === totalPages
+              ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-japan hover:bg-black-japan"
+          }`}
+        >
+          Següent
+        </button>
       </div>
     </div>
   );
