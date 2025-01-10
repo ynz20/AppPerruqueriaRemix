@@ -19,7 +19,7 @@ export default function WorkerEditPage() {
 }
 
 export async function action({ request }) {
-  const token = await getTokenFromRequest(request);
+  const token = await getTokenFromRequest(request) as string;
 
   if (request.method === "PUT") {
     const formData = await request.formData();
