@@ -1,6 +1,8 @@
 import { ReservationData } from "~/types/interfaces";
 
+
 export async function addReservation(reservationData: ReservationData, token: string) {
+
   if (!token) {
     throw new Response("Inicia sessió per accedir.", { status: 401 });
   }
@@ -45,6 +47,7 @@ export async function revisarTorn(token: string) {
     try {
       const errorResponse = await response.json();
       errorMessage = errorResponse.message || "Error desconegut";
+
     } catch (e) {
       errorMessage = "Error al processar la resposta del servidor";
     }
@@ -55,6 +58,7 @@ export async function revisarTorn(token: string) {
   const data = await response.json();
   return data.active;
 }
+
 
 export async function alternarTorn(token: string) {
   if (!token) {
@@ -84,3 +88,4 @@ export async function alternarTorn(token: string) {
   const data = await response.json();
   return data.message;
 }
+

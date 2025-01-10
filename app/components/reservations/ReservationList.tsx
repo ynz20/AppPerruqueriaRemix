@@ -57,11 +57,11 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
   const getEventClass = (status: string) => {
     switch (status) {
       case "completed":
-        return "bg-green-400 text-white";
+        return "bg-green-japan text-white";
       case "pending":
-        return "bg-yellow-500 text-white";
+        return "bg-yellow-japan text-black-japan";
       case "cancelled":
-        return "bg-red-500 text-white";
+        return "bg-red-japan text-white";
       default:
         return "bg-blue-500 text-white";
     }
