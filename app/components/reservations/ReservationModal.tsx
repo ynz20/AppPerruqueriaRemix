@@ -18,12 +18,13 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   if (!isOpen || !reservation) return null;
 
+  
   const updateReservationStatus = async (newStatus: string) => {
-    try {
-
+  
       const response = await fetch(
         `http://localhost:8085/api/reservations/${reservation.id}/status`,
         {
@@ -32,7 +33,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`, // Enviar el token
           },
-          body: JSON.stringify({ status: newStatus }), // Enviar el nou estat
+          body: JSON.stringify({ status: newStatus }), // Enviar el nou estat 
         }
       );
 
@@ -43,9 +44,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
 
       refreshReservations(); // Recargar la llista de reserves
       onClose(); // Tancar el modal
-    } catch (error: any) {
-      console.error("Error al actualitzar l'estat:", error.message);
-    }
+  
   };
 
   const handleCompleteReservation = async () => {
@@ -75,6 +74,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
       await updateReservationStatus("completed");
     } catch (error: any) {
       console.error("Error al completar la reserva:", error.message);
+      setErrorMessage(error.message || "Hi ha hagut un error inesperat.");
     }
   };
 
@@ -118,6 +118,11 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
             {reservation.status}
           </p>
         </div>
+
+        {/* Mostrar missatge d'error si no hi ha torn obert */}
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+        )}
 
         <div className="mt-6 space-y-4">
           <button
