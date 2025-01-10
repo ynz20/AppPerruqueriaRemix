@@ -1,36 +1,18 @@
 import { LoaderFunction } from "@remix-run/node";
-import { json, Link, Outlet, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import ServiceList from "~/components/services/ServiceList";
+import { getServices } from "~/data/service.server";
 import { Service } from "~/types/interfaces";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  try {
     const token = await getTokenFromRequest(request);
-
     if (!token) {
       throw new Response("Inicia sessió per accedir.", { status: 401 });
     }
+    const services = await getServices(token);
+    return services;
 
-    const response = await fetch("http://localhost:8085/api/services", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return json(data);
-  } catch (err) {
-    throw new Response("Error en carregar els serveis. Intenta-ho més tard.", {
-      status: 500,
-    });
-  }
 };
 
 export default function ServicesPage() {

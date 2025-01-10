@@ -7,11 +7,8 @@ import {
   useMatches,
 } from "@remix-run/react";
 import React from "react";
-import { Service } from "~/types/interfaces";
+import { Service, ValidationErrors } from "~/types/interfaces";
 
-interface ValidationErrors {
-  [key: string]: string;
-}
 
 const ServicesForm: React.FC = () => {
   const navigation = useNavigation();
@@ -24,7 +21,7 @@ const ServicesForm: React.FC = () => {
     (match) => match.id === "routes/_app.services"
   );
 
-  const services = matchedRoute?.data?.services as Service[] | undefined;
+  const services = (matchedRoute?.data as { services?: Service[] })?.services;
 
   const serviceData = services?.find(({ id }) => id === Number(params.id)) || {
     id: "",

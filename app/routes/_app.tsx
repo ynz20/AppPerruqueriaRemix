@@ -13,7 +13,7 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen">
-      {/* BARRA DE NAVEGACIÓ lateral amb links */} 
+      {/* BARRA DE NAVEGACIÓ lateral amb links */}
       <nav className="w-1/5 bg-black-japan text-white-japan flex flex-col items-center justify-center">
         <ul className="space-y-6">
           {/* Rol User */}
@@ -33,6 +33,14 @@ export default function Layout() {
                   className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Clients
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/products"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
+                >
+                  Productes
                 </Link>
               </li>
               <li>
@@ -62,6 +70,14 @@ export default function Layout() {
                   className="text-lg font-semibold hover:text-yellow-japan transition"
                 >
                   Clients
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/products"
+                  className="text-lg font-semibold hover:text-yellow-japan transition"
+                >
+                  Productes
                 </Link>
               </li>
               <li>

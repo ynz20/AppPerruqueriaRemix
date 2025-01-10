@@ -23,6 +23,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
 
   const updateReservationStatus = async (newStatus: string) => {
     try {
+
       const response = await fetch(
         `http://localhost:8085/api/reservations/${reservation.id}/status`,
         {

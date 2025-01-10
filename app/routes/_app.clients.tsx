@@ -6,15 +6,20 @@ import { Client } from "~/types/interfaces";
 import { getClients } from "~/data/client.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
+
+  //Recollim Token
   const token = await getTokenFromRequest(request);
 
+  //Si no hi ha token, llancem un error
   if (!token) {
-    throw new Response("Inicia sessió per accedir.", { status: 401 });
+    throw new Error("Inicia sessió per accedir.");
   }
 
+  //Obtenim els clients amb el token
   const clients = await getClients(token);
   return clients;
 };
+
 
 export default function ClientsPage() {
   const { clients } = useLoaderData<{ clients: Client[] }>();

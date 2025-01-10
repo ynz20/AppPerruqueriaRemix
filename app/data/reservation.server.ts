@@ -32,5 +32,3 @@ export async function addReservation(
     throw new Error(errorMessage);
   }
 }
-
-

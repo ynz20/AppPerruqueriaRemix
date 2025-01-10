@@ -1,49 +1,26 @@
 import { json, LoaderFunction, ActionFunction, redirect } from "@remix-run/node";
 import { useLoaderData, useActionData, Form } from "@remix-run/react";
-import { sessionStorage } from "~/utils/sessionUtils";
+import { getTokenFromRequest, getUserIdFromRequest, sessionStorage } from "~/utils/sessionUtils";
 import { useState } from "react";
 import { User } from "~/types/interfaces";
+import { getWorkerById, updateUser } from "~/data/workers.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
-  const userId = session.get("user_id");
+  // const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  // const userId = session.get("user_id");
+
+  const token = await getTokenFromRequest(request);
+  const userId = await getUserIdFromRequest(request);
 
   if (!userId) {
     return redirect("/login");
   }
 
-  const response = await fetch(`http://localhost:8085/api/users/${userId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${session.get("token")}`,
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw json({ error: "Error carregant el perfil." }, { status: response.status });
-  }
+  const dataProfile = await getWorkerById(token, userId);
 
-  const userData = await response.json();
-  return json(userData);
+  return dataProfile;
+  
 };
-
-async function updateUser(updatedData: User, userId: string, token: string) {
-  const response = await fetch(`http://localhost:8085/api/users/${userId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw json(errorData, { status: response.status });
-  }
-
-  return response.json();
-}
 
 export const action: ActionFunction = async ({ request }) => {
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
@@ -70,7 +47,8 @@ export const action: ActionFunction = async ({ request }) => {
     }
   
     try {
-      await updateUser(updatedData, userId, session.get("token"));
+      const token = await getTokenFromRequest(request);
+      await updateUser(updatedData, userId, token);
       return json({ success: "Perfil actualitzat correctament!" });
     } catch (error) {
       if (error instanceof Response) {
