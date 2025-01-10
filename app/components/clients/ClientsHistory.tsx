@@ -6,7 +6,7 @@ interface ClientsHistoryProps {
 }
 
 const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations }) => {
-  if (reservations.length === 0) {
+  if (reservations.length === 0 || !reservations) {
     return <p className="text-center text-gray-600">No hi ha reserves disponibles.</p>;
   }
 

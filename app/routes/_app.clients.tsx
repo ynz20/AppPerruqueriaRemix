@@ -17,6 +17,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   //Obtenim els clients amb el token
   const clients = await getClients(token);
+
+  if (!clients) {
+    throw new Error("Error en carregar els clients. Intenta-ho més tard.");
+  }
   return clients;
 };
 
