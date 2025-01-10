@@ -1,7 +1,9 @@
 import { ReservationData } from "~/types/interfaces";
 
-export async function addReservation(reservationData: ReservationData, token: string) {
-
+export async function addReservation(
+  reservationData: ReservationData,
+  token: string
+) {
   if (!token) {
     throw new Response("Inicia sessió per accedir.", { status: 401 });
   }
@@ -20,7 +22,8 @@ export async function addReservation(reservationData: ReservationData, token: st
     let errorMessage = "Error desconocido";
     try {
       const errorResponse = await response.json();
-      errorMessage = errorResponse.message || errorResponse.error || "Error desconocido";
+      errorMessage =
+        errorResponse.message || errorResponse.error || "Error desconocido";
     } catch (e) {
       errorMessage = "Error al procesar la respuesta del servidor";
     }
@@ -29,6 +32,3 @@ export async function addReservation(reservationData: ReservationData, token: st
     throw new Error(errorMessage);
   }
 }
-
-
-
