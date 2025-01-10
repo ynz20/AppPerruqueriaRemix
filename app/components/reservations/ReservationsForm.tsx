@@ -1,11 +1,14 @@
+// ReservationsForm.tsx
+import React, { useState } from "react";
 import {
   Form,
-  useLoaderData,
   useActionData,
   useNavigation,
   Link,
+  useLoaderData,
+  useOutletContext,
 } from "@remix-run/react";
-import React from "react";
+import useAvailableWorkers from "~/routes/useAvailableWorkers";
 
 interface ValidationErrors {
   [key: string]: string;
@@ -16,11 +19,37 @@ const ReservationsForm: React.FC = () => {
   const validationErrors = useActionData<ValidationErrors>();
   const isSubmitting = navigation.state !== "idle";
 
-  const { clients, services, workers } = useLoaderData<{
+  const { clients, services } = useLoaderData<{
     clients: { dni: string; name: string; surname: string }[];
-    services: { id: number; name: string }[];
-    workers: { dni: string; name: string; surname: string }[];
+    services: { id: number; name: string; estimation: number }[];
   }>();
+
+  // Obtenir el token des de l'OutletContext
+  const { token } = useOutletContext<{ token: string }>();
+
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedHour, setSelectedHour] = useState("");
+  const [selectedService, setSelectedService] = useState("");
+
+  // Usar el custom hook
+  const { workers, error } = useAvailableWorkers(
+    token,
+    selectedDate,
+    selectedHour,
+    selectedService
+  );
+
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedHour(e.target.value);
+  };
+
+  const handleServiceChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedService(e.target.value);
+  };
 
   return (
     <Form
@@ -66,6 +95,7 @@ const ReservationsForm: React.FC = () => {
           id="service"
           name="service"
           required
+          onChange={handleServiceChange}
           className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           <option value="">Selecciona un servei</option>
@@ -76,7 +106,51 @@ const ReservationsForm: React.FC = () => {
           ))}
         </select>
         {validationErrors?.service && (
-          <p className="mt-1 text-xs text-red-500">{validationErrors.service}</p>
+          <p className="mt-1 text-xs text-red-500">
+            {validationErrors.service}
+          </p>
+        )}
+      </div>
+
+      {/* Date */}
+      <div className="mb-4">
+        <label
+          htmlFor="day"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
+          Dia
+        </label>
+        <input
+          type="date"
+          id="day"
+          name="day"
+          required
+          onChange={handleDateChange}
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+        />
+        {validationErrors?.day && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.day}</p>
+        )}
+      </div>
+
+      {/* Hour */}
+      <div className="mb-4">
+        <label
+          htmlFor="hour"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
+          Hora
+        </label>
+        <input
+          type="time"
+          id="hour"
+          name="hour"
+          required
+          onChange={handleHourChange}
+          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+        />
+        {validationErrors?.hour && (
+          <p className="mt-1 text-xs text-red-500">{validationErrors.hour}</p>
         )}
       </div>
 
@@ -97,85 +171,15 @@ const ReservationsForm: React.FC = () => {
           <option value="">Selecciona un treballador</option>
           {workers.map((worker) => (
             <option key={worker.dni} value={worker.dni}>
-              {worker.name} {worker.surname} - {worker.dni}
+              {worker.name} {worker.surname}
             </option>
           ))}
         </select>
         {validationErrors?.worker && (
           <p className="mt-1 text-xs text-red-500">{validationErrors.worker}</p>
         )}
+        {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       </div>
-
-      {/* Hour */}
-      <div className="mb-4">
-        <label
-          htmlFor="hour"
-          className="mb-2 block text-sm font-medium text-gray-600"
-        >
-          Hora
-        </label>
-        <input
-          type="time"
-          id="hour"
-          name="hour"
-          required
-          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
-        />
-        {validationErrors?.hour && (
-          <p className="mt-1 text-xs text-red-500">{validationErrors.hour}</p>
-        )}
-      </div>
-
-      {/* Day */}
-      <div className="mb-4">
-        <label
-          htmlFor="day"
-          className="mb-2 block text-sm font-medium text-gray-600"
-        >
-          Dia
-        </label>
-        <input
-          type="date"
-          id="day"
-          name="day"
-          required
-          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
-        />
-        {validationErrors?.day && (
-          <p className="mt-1 text-xs text-red-500">{validationErrors.day}</p>
-        )}
-      </div>
-
-      {validationErrors && (
-        <div className="mb-4 p-4 bg-red-100 border border-red-500 rounded-md">
-          <div className="flex items-center mb-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-5 h-5 text-red-500 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span className="text-lg font-semibold text-red-500">
-              Error
-            </span>
-          </div>
-          <ul className="list-inside list-disc text-sm text-red-700">
-            {Object.values(validationErrors).map((error: string, index) => (
-              <li key={index} className="mb-1">
-                {error}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
 
       <div className="flex items-center justify-between mt-6">
         <button

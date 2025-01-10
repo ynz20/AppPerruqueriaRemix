@@ -3,17 +3,18 @@ import { ActionFunction, json } from "@remix-run/node";
 import { sessionStorage } from "../utils/sessionUtils";
 import { ActionData } from "~/types/interfaces";
 
-
 export const action: ActionFunction = async ({ request }) => {
-
-  //Recollim les dades del formulari
   const formData = await request.formData();
-  const data = {
-    email: formData.get("email"),
-    password: formData.get("password"),
-  };
+  const identifier = formData.get("identifier");
+  const password = formData.get("password");
 
-  //Fem una petició POST al servidor per iniciar sessió
+  // Detectar si l'entrada és un email o un nick
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier as string);
+
+  const data = isEmail
+    ? { email: identifier, password }
+    : { nick: identifier, password };
+
   try {
     const response = await fetch("http://localhost:8085/api/login", {
       method: "POST",
@@ -22,21 +23,21 @@ export const action: ActionFunction = async ({ request }) => {
       },
       body: JSON.stringify(data),
     });
-    const error = await response.json();
+
+    const result = await response.json();
 
     if (!response.ok) {
       return json(
-        { error: error.message || "Error en el inici de sessió." },
+        { error: result.message || "Error en el inici de sessió." },
         { status: response.status }
       );
     }
 
-    //Si tot ha anat bé, guardem les dades de sessió i redirigim a la pàgina de clients
     const session = await sessionStorage.getSession();
-    session.set("token", error.token);
-    session.set("role", error.role);
-    session.set("user_id", error.user_id);
-    // session.set("user_id", data.user_id);
+    session.set("token", result.token);
+    session.set("role", result.role);
+    session.set("user_id", result.user_id);
+
     const setCookie = await sessionStorage.commitSession(session);
     return redirect("/clients", {
       headers: {
@@ -45,12 +46,16 @@ export const action: ActionFunction = async ({ request }) => {
       status: 302,
     });
   } catch (error) {
-    return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });
+    return json(
+      { error: "Error del servidor. Torna-ho a intentar més tard." },
+      { status: 500 }
+    );
   }
 };
 
 export default function Login() {
   const actionData = useActionData<ActionData>();
+
   return (
     <div className="flex h-screen">
       {/* Menú lateral */}
@@ -90,8 +95,8 @@ export default function Login() {
             <div className="mb-6">
               <input
                 type="text"
-                id="email"
-                name="email"
+                id="identifier"
+                name="identifier"
                 placeholder="Correu/Nom d’usuari"
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
@@ -130,5 +135,3 @@ export default function Login() {
     </div>
   );
 }
-
-

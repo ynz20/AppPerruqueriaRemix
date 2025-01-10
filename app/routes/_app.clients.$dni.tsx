@@ -1,8 +1,9 @@
 import { redirect, useNavigate } from "@remix-run/react";
 import Modal from "../components/utils/Modal";
 import ClientsForm from "~/components/clients/ClientsForm";
-import { updateClient } from "~/data/client.server";
+import { deleteClient, updateClient } from "~/data/client.server";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
+import type { ActionFunction } from "@remix-run/node";
 
 
 export default function ClientsAddPage() {
@@ -19,18 +20,27 @@ export default function ClientsAddPage() {
     )
 }
 
-export async function action({ request }) {
+
+
+export const action: ActionFunction = async ({ request }) => {
     const token = await getTokenFromRequest(request);
-    if (request.method === 'PUT') {
-        const formData = await request.formData();
-        const clientData = {
-            name: formData.get('name'),
-            surname: formData.get('surname'),
-            dni: formData.get('dni'),
-            telf: formData.get('telf'),
-            email: formData.get('email'),
-        };
-        await updateClient(clientData, token);
+    const formData = await request.formData();
+    const method = formData.get("_method") || request.method;
+  
+    if (method === "PUT") {
+      const clientData = {
+        name: formData.get("name"),
+        surname: formData.get("surname"),
+        dni: formData.get("dni"),
+        telf: formData.get("telf"),
+        email: formData.get("email"),
+      };
+      await updateClient(clientData, token);
+    } else if (method === "delete") {
+      const dni = formData.get("dni");
+      await deleteClient(dni, token);
     }
-    return redirect('/clients');
-}
+  
+    return redirect("/clients");
+  }
+  

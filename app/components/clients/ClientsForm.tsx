@@ -1,10 +1,7 @@
 import { Form, Link, useActionData, useMatches, useNavigation, useParams } from "@remix-run/react";
 import React from "react";
-import { Client } from "~/types/interfaces";
+import { Client, ValidationErrors } from "~/types/interfaces";
 
-interface ValidationErrors {
-  [key: string]: string;
-}
 
 const ClientsForm: React.FC = () => {
   const navigation = useNavigation();
@@ -29,7 +26,7 @@ const ClientsForm: React.FC = () => {
     <Form
       method={clientData.dni ? "put" : "post"}
       action={clientData.dni ? `/clients/${clientData.dni}` : "/clients/add"}
-      className="flex flex-col rounded-lg bg-white-japan p-6 shadow-lg border border-gray-200"
+      className="flex flex-col rounded-lg bg-white-japan p-6 shadow-md"
       id="clients-form"
     >
       {clientData.dni && (
@@ -61,7 +58,7 @@ const ClientsForm: React.FC = () => {
       <div className="mb-4">
         <label
           htmlFor="name"
-          className="mb-2 block text-sm font-medium text-gray-600"
+          className="mb-2 block font-semibold text-gray-600"
         >
           Nom
         </label>
@@ -72,8 +69,7 @@ const ClientsForm: React.FC = () => {
           required
           defaultValue={clientData.name}
           maxLength={50}
-          className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
-          placeholder="Nom"
+          className="w-full rounded-md border border-gray-300 text-white-japan p-2 focus:border-red-japan  focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
       </div>
 

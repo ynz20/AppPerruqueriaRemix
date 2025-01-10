@@ -3,6 +3,11 @@ export interface ActionData {
   success?: string;
 }
 
+export interface ValidationErrors {
+  [key: string]: string;
+}
+
+//Exclusives Clients
 export interface Client {
   dni: string;       // DNI del client
   name: string;      // Nom del client
@@ -11,12 +16,21 @@ export interface Client {
   email: string;     // Correu electrònic del client
 }
 
+export interface ClientListProps {
+  clients: Client[] | undefined;
+}
+
+//Exclusives Serveis
 export interface Service {
   id: number;
   name: string;      // Nom del servei
   description: string; // Descripció del servei
   price: number;     // Preu del servei
   estimation: string; // Estimació del servei
+}
+
+export interface ServiceListProps {
+  services: Service[] | undefined;
 }
 
 export interface Reservation {
@@ -52,5 +66,13 @@ export interface User {
   password: string;  // Contrasenya del treballador
   email: string;     // Correu electrònic del treballador
   role: boolean;      // Rol del treballador
+}
+
+export interface Product{
+  id:number // Id del producte
+  name: string;  // Nom del producte
+  description: string; // Descripció del producte
+  price: number;
+  stock: number;
 }
 
