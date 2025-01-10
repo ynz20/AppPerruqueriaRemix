@@ -18,34 +18,40 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
   const [showRatingForm, setShowRatingForm] = useState(false);
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   if (!isOpen || !reservation) return null;
 
+
+  // Reset dels camps i el missatge de error quan es tenca el modal
+  const handleClose = () => {
+    setShowRatingForm(false);
+    setRating(0);
+    setComment("");
+    setErrorMessage("");
+    onClose(); 
+  };
+
   const updateReservationStatus = async (newStatus: string) => {
-    try {
-
-      const response = await fetch(
-        `http://localhost:8085/api/reservations/${reservation.id}/status`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Enviar el token
-          },
-          body: JSON.stringify({ status: newStatus }), // Enviar el nou estat
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Error al actualitzar la reserva");
+    const response = await fetch(
+      `http://localhost:8085/api/reservations/${reservation.id}/status`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Enviar el token
+        },
+        body: JSON.stringify({ status: newStatus }), // Enviar el nou estat
       }
+    );
 
-      refreshReservations(); // Recargar la llista de reserves
-      onClose(); // Tancar el modal
-    } catch (error: any) {
-      console.error("Error al actualitzar l'estat:", error.message);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error al actualitzar la reserva");
     }
+
+    refreshReservations(); // Recargar la llista de reserves
+    handleClose(); // Tancar el modal
   };
 
   const handleCompleteReservation = async () => {
@@ -75,6 +81,7 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
       await updateReservationStatus("completed");
     } catch (error: any) {
       console.error("Error al completar la reserva:", error.message);
+      setErrorMessage(error.message || "Hi ha hagut un error inesperat.");
     }
   };
 
@@ -119,9 +126,14 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
           </p>
         </div>
 
+        {/* Mostrar missatge d'error si no hi ha torn obert */}
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+        )}
+
         <div className="mt-6 space-y-4">
           <button
-            onClick={onClose}
+            onClick={handleClose} // Utilitzem handleClose per tancar el modal i resetar els estats
             className="w-full py-2 bg-gray-300 text-black-japan text-sm font-semibold rounded-lg hover:bg-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
           >
             Tanca

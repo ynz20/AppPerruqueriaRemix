@@ -80,7 +80,7 @@ export async function action({ request }: { request: Request }) {
     worker_dni: formData.get("worker") as string,
     hour, // Hora ja validada
     date: new Date(formData.get("day") as string).toISOString().split("T")[0],
-    shift_id: 1,
+    shift_id: null,
     status: "pending",
   };
 
