@@ -33,9 +33,7 @@ export async function getClients(token: string) {
     const data = await response.json();
     return json(data);
   } catch (err) {
-    throw new Response("Error en carregar els clients. Intenta-ho més tard.", {
-      status: 500,
-    });
+    throw new Error("Error en carregar els clients. Intenta-ho més tard.");
   }
 }
 

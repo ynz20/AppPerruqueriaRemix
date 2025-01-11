@@ -26,6 +26,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
 
     const data = await response.json();
+    console.log('reserves des de la bbdd: ', data);
+
     return json({ reservations: data.reservations, token });
   } catch (err) {
     throw new Response("Error en carregar les reserves. Intenta-ho més tard.", {

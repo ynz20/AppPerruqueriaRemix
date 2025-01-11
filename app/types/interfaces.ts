@@ -41,12 +41,16 @@ export interface Reservation {
   date: string;      // Data de la reserva
   hour: string;      // Hora de la reserva
   status: string;    // Estat de la reserva
-  // user: User;    // Informació del treballador
+  user: User;    // Informació del treballador
   client: Client;    // Informació del client
   service: Service;  // Informació del servei
   comment: string;    // Comentari de la reserva
   rating: number;     // Puntuació de la reserva
 
+}
+
+export interface ReservationListProps {
+  reservations: Reservation[];
 }
 
 export interface ReservationData {
@@ -72,10 +76,22 @@ export interface User {
 }
 
 export interface Product{
-  id:number // Id del producte
+  id:number; // Id del producte
   name: string;  // Nom del producte
   description: string; // Descripció del producte
   price: number;
   stock: number;
 }
 
+export interface Shift{
+  id: number;
+  start_time: string;
+  end_time: string;
+  date: Date;
+  reservations: Reservation[];
+}
+
+
+export interface ShiftListProps {
+  shifts: Shift[] | undefined;
+}
