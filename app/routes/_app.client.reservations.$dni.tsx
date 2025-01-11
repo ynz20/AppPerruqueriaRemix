@@ -3,6 +3,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import ClientsHistory from "~/components/clients/ClientsHistory";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import { Reservation } from "~/types/interfaces";
+import { getReservationsByDNI } from "~/data/client.server";
 
 interface LoaderData {
   reservations: Reservation[];
@@ -17,21 +18,10 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
   const { dni } = params;
   try {
-    const response = await fetch(`http://localhost:8085/api/reservations/client/${dni}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
 
-    if (!response.ok) {
-      throw new Error(`Error ${response.status}: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    console.log(data.reservations);
-    return json({ reservations: data.reservations });
+    const data = await getReservationsByDNI(token, dni as string);
+    
+     return json({ reservations: data.reservations });
   } catch (error) {
     console.error("Error carregant les reserves:", error);
     throw new Response("Error al carregar les reserves.", { status: 500 });
@@ -50,7 +40,7 @@ export default function ReservationsClientPage() {
         <span>Tornar Enrere</span>
       </Link>
       <div className="p-4">
-        <h2 className="text-xl font-bold text-center mb-4">Reserves del Client</h2>
+        <h2 className="text-xl font-bold text-center mb-4 text-black">Reserves del Client</h2>
         <ClientsHistory reservations={reservations} />
       </div>
     </>

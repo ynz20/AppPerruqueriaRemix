@@ -1,20 +1,26 @@
 import { ActionFunction, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { ActionData } from "~/types/interfaces";
+import { userFormValidator } from "~/data/validacio.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
   const data = {
-    dni: formData.get("dni"),
-    name: formData.get("name"),
-    surname: formData.get("surname"),
-    nick: formData.get("nick"),
-    telf: formData.get("telf"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    password_confirmation: formData.get("password"),
+    dni: formData.get("dni") as string,
+    name: formData.get("name") as string,
+    surname: formData.get("surname") as string,
+    nick: formData.get("nick") as string,
+    telf: formData.get("telf") as string,
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    password_confirmation: formData.get("password") as string,
+    role: false
   };
+  const  { valid, errors } = userFormValidator(data);
+    if (!valid) {
+        console.log("error", errors);
+        return {errors};
+    }
 
   try {
     const response = await fetch("http://localhost:8085/api/register", {
@@ -29,7 +35,22 @@ export const action: ActionFunction = async ({ request }) => {
       const error = await response.json();
       return json({ error: error.message || "Error en el registre." }, { status: response.status });
     }
+    const resultat = await response.json();
 
+    if (resultat.id == 1){
+      errors.dni = resultat.message;
+      return {errors}
+    } else if(resultat.id == 2) {
+      errors.nick = resultat.message;
+      return {errors}
+    } else if (resultat.id == 3) {
+      errors.email = resultat.message;
+      return {errors}
+    } else if (resultat.id == 4){
+      errors.telf = resultat.message;
+      return {errors}
+    }
+    
     return redirect("/login");
   } catch (error) {
     return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });
@@ -39,7 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 
 export default function Register() {
-  const actionData = useActionData<ActionData>();
+  const actionData = useActionData<{ errors?: Record<string, string> }>();
 
   return (
     <div className="flex min-h-screen overflow-hidden">
@@ -62,22 +83,9 @@ export default function Register() {
           <h1 className="text-3xl font-bold text-red-700 text-center mb-6">
             Benvingut/da!
           </h1>
-          {actionData?.error && (
-            <p className="text-red-500 text-sm mb-4 text-center">
-              {typeof actionData.error === "string"
-                ? actionData.error
-                : JSON.stringify(actionData.error)}
-            </p>
-          )}
-          {actionData?.success && (
-            <p className="text-green-500 text-sm mb-4 text-center">
-              {typeof actionData.success === "string"
-                ? actionData.success
-                : JSON.stringify(actionData.success)}
-            </p>
-          )}
           <Form method="post">
             <div className="space-y-2">
+            {actionData?.errors?.nick && <p className="text-red-500 text-sm">{actionData.errors.nick}</p>}
               <input
                 type="text"
                 id="nick"
@@ -86,6 +94,7 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.name && <p className="text-red-500 text-sm">{actionData.errors.name}</p>}
               <input
                 type="text"
                 id="name"
@@ -94,6 +103,7 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.surname && <p className="text-red-500 text-sm">{actionData.errors.surname}</p>}
               <input
                 type="text"
                 id="surname"
@@ -102,6 +112,7 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.dni && <p className="text-red-500 text-sm">{actionData.errors.dni}</p>}
               <input
                 type="text"
                 id="dni"
@@ -110,6 +121,7 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.telf && <p className="text-red-500 text-sm">{actionData.errors.telf}</p>}
               <input
                 type="tel"
                 id="telf"
@@ -120,6 +132,7 @@ export default function Register() {
                 title="Introdueix un número de telèfon vàlid (9 dígits)."
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.email && <p className="text-red-500 text-sm">{actionData.errors.email}</p>}
               <input
                 type="email"
                 id="email"
@@ -128,6 +141,7 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
+              {actionData?.errors?.password && <p className="text-red-500 text-sm">{actionData.errors.password}</p>}
               <input
                 type="password"
                 id="password"
