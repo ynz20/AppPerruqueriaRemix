@@ -77,8 +77,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       className="calendar-container"
       style={{
         maxWidth: "100%",
-        height: "500px",
-        overflowY: "auto",
+        height: "80vh", // Altura completa de la vista
         padding: "10px",
         borderRadius: "8px",
       }}
@@ -139,8 +138,8 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
         events={events}
         eventClick={handleEventClick}
         eventClassNames={(info) => getEventClass(info.event.extendedProps.status)}
-        height="auto"
-        contentHeight="auto"
+        height="100%" // Altura al 100% del contenedor
+        contentHeight="auto" // Ajusta el contenido automáticamente
         headerToolbar={{
           left: "prev,next today",
           center: "title",
@@ -153,7 +152,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           dayGridDay: { buttonText: "Dia" },
         }}
       />
-
+  
       <ReservationModal
         isOpen={modalOpen}
         reservation={selectedReservation}
@@ -163,6 +162,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       />
     </div>
   );
+  
 };
 
 export default ReservationCalendar;
