@@ -5,7 +5,7 @@ import { addReservation } from "~/data/reservation.server";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import { getClients } from "~/data/client.server";
 import { getServices } from "~/data/service.server";
-import { getWorkers } from "~/data/worker.server";
+import { getWorkersnotAdmin } from "~/data/worker.server";
 import { useState } from "react";
 
 export const loader = async ({ request }: { request: Request }) => {
@@ -19,7 +19,7 @@ export const loader = async ({ request }: { request: Request }) => {
     await Promise.all([
       getClients(token),
       getServices(token),
-      getWorkers(token),
+      getWorkersnotAdmin(token),
     ]);
 
   const clientsData = await clientsResponse.json();

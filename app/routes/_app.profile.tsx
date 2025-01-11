@@ -3,7 +3,7 @@ import { useLoaderData, useActionData, Form } from "@remix-run/react";
 import { getTokenFromRequest, getUserIdFromRequest, sessionStorage } from "~/utils/sessionUtils";
 import { useState } from "react";
 import { User } from "~/types/interfaces";
-import { getWorkerById, updateUser } from "~/data/workers.server";
+import { getWorkerById, updateUser } from "~/data/worker.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   // const session = await sessionStorage.getSession(request.headers.get("Cookie"));
@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
   
     try {
       const token = await getTokenFromRequest(request);
-      await updateUser(updatedData, userId, token);
+      await updateProfile(updatedData, userId, token);
       return json({ success: "Perfil actualitzat correctament!" });
     } catch (error) {
       if (error instanceof Response) {

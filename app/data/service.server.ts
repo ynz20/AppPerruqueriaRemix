@@ -36,7 +36,7 @@ export async function addService(serviceData: Service, token: string) {
 // Funció per obtenir els serveis
 export async function getServices(token: string) {
   try {
-    const response = await fetch("http://localhost:8085/api/services", {
+    const response = await fetch("http://localhost:8085/api/services/pull", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
