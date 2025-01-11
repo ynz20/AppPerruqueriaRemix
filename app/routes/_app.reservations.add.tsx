@@ -4,8 +4,8 @@ import Modal from "~/components/utils/Modal";
 import { addReservation } from "~/data/reservation.server";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 import { getClients } from "~/data/client.server";
-import { getServices } from "~/data/service.server";
-import { getWorkers } from "~/data/worker.server";
+import { getServicesNotAdmin } from "~/data/service.server";
+import { getWorkersnotAdmin } from "~/data/worker.server";
 import { useState } from "react";
 
 export const loader = async ({ request }: { request: Request }) => {
@@ -18,8 +18,8 @@ export const loader = async ({ request }: { request: Request }) => {
   const [clientsResponse, servicesResponse, workersResponse] =
     await Promise.all([
       getClients(token),
-      getServices(token),
-      getWorkers(token),
+      getServicesNotAdmin(token),
+      getWorkersnotAdmin(token),
     ]);
 
   const clientsData = await clientsResponse.json();

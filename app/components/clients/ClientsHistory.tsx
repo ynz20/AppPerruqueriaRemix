@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Reservation } from "~/types/interfaces";
 
 interface ClientsHistoryProps {
@@ -6,14 +6,36 @@ interface ClientsHistoryProps {
 }
 
 const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations }) => {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 6; // Nombre de reserves per pàgina
+
+  // Calcular el nombre total de pàgines
+  const totalPages = Math.ceil(reservations.length / ITEMS_PER_PAGE);
+
+  // Obtenir les reserves de la pàgina actual
+  const paginatedReservations = reservations.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  // Funcions per navegar entre pàgines
+  const handlePreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
   if (reservations.length === 0 || !reservations) {
     return <p className="text-center text-gray-600">No hi ha reserves disponibles.</p>;
   }
 
   return (
     <div className="p-4">
+      {/* Llista de reserves */}
       <div className="grid grid-cols-2 gap-4">
-        {reservations.map((reservation) => (
+        {paginatedReservations.map((reservation) => (
           <div
             key={reservation.id}
             className="bg-gray-200 rounded-lg shadow-lg p-4 flex flex-col justify-between"
@@ -59,11 +81,37 @@ const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations }) => {
           </div>
         ))}
       </div>
+
+      {/* Navegació de pàgines */}
+      <div className="flex justify-between items-center mt-4">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className={`px-4 py-2 rounded-md text-white ${
+            currentPage === 1
+          ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-japan hover:bg-black-japan"
+          }`}
+        >
+          Anterior
+        </button>
+        <span className="text-gray-700">
+          Pàgina {currentPage} de {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className={`px-4 py-2 rounded-md text-white ${
+            currentPage === totalPages
+             ? "bg-gray-500 cursor-not-allowed"
+              : "bg-red-japan hover:bg-black-japan"
+          }`}
+        >
+          Següent
+        </button>
+      </div>
     </div>
   );
 };
 
 export default ClientsHistory;
-
-
-

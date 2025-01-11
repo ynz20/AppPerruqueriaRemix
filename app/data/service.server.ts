@@ -55,6 +55,28 @@ export async function getServices(token: string) {
   }
 }
 
+// Funció per obtenir els serveis
+export async function getServicesNotAdmin(token: string) {
+  try {
+    const response = await fetch("http://localhost:8085/api/services/pull", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return json(data);
+  } catch (err) {
+    throw new Error("Error en carregar els serveis. Intenta-ho més tard.");
+  }
+}
+
 // Funció per actualitzar un servei
 export async function updateService(serviceData: Service, token: string) {
   if (!token) {
