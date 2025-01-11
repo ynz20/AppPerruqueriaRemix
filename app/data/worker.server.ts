@@ -102,70 +102,40 @@ export async function updateWorker(
   }
 }
 
-export async function getWorkerById(token: string, userId: string) {
+
+export async function getWorkerById(token: string, userId: string){
   const response = await fetch(`http://localhost:8085/api/users/${userId}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  });
-  if (!response.ok) {
-    throw json(
-      { error: "Error carregant el perfil." },
-      { status: response.status }
-    );
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw json({ error: "Error carregant el perfil." }, { status: response.status });
+    }
+  
+    const userData = await response.json();
+    return json(userData);
   }
-
-  const userData = await response.json();
-  return json(userData);
-}
-
-export async function updateUser(
-  updatedData: User,
-  userId: string,
-  token: string
-) {
-  const response = await fetch(`http://localhost:8085/api/users/${userId}`, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(updatedData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw json(errorData, { status: response.status });
-  }
-
-  return response.json();
-}
-
-// Metode per actualizat el perfil
-export async function updateProfile(
-  updatedData: User,
-  userId: string,
-  token: string
-) {
-  const response = await fetch(
-    `http://localhost:8085/api/users/${userId}/update`,
-    {
+  // Peticio per actualizar cualsevol usuari
+  export async function updateUser(updatedData: User, DNI: string, token: string) {
+    const response = await fetch(`http://localhost:8085/api/users/${DNI}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(updatedData),
+    });
+  
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log(errorData);
+      throw json(errorData, { status: response.status });
     }
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.log(errorData);
-    throw json(errorData, { status: response.status });
+  
+    return response.json();
   }
+  
 
-  return response.json();
-}
