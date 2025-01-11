@@ -7,7 +7,7 @@ export default function TornList({ shifts = [] }: ShiftListProps) {
             {shifts.map((shift) => {
                 // Calcular el total de todas las reservas de este turno
                 const totalReservations = shift.reservations.reduce((sum, reservation) => {
-                    return sum + (parseFloat(reservation.service.price) || 0); // Usar parseFloat para precios decimales
+                    return sum + (parseFloat(reservation.service.price.toString()) || 0);
                 }, 0);
 
                 console.log(`Total per Torn #${shift.id}: ${totalReservations.toFixed(2)}`);
