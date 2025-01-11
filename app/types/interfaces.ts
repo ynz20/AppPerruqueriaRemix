@@ -41,9 +41,12 @@ export interface Reservation {
   date: string;      // Data de la reserva
   hour: string;      // Hora de la reserva
   status: string;    // Estat de la reserva
-  user: User;    // Informació del treballador
-  client: Client;    // Informació del client+
+  // user: User;    // Informació del treballador
+  client: Client;    // Informació del client
   service: Service;  // Informació del servei
+  comment: string;    // Comentari de la reserva
+  rating: number;     // Puntuació de la reserva
+
 }
 
 export interface ReservationData {

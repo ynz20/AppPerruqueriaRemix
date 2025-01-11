@@ -93,7 +93,6 @@ export async function getReservationsByDNI(token: string, dni: string) {
       return ({ reservations: [] });
     }
 
-    console.log("data: ", data);
     return ({ reservations: data.reservations });
   } catch (err) {
     throw new Response("Error al carregar les reserves.", {

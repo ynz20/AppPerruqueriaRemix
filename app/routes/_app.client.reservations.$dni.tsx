@@ -21,11 +21,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
     const data = await getReservationsByDNI(token, dni as string);
     
-    console.log('ara arriba el següent: ', data);
-
-
-
-    return json({ reservations: data.reservations });
+     return json({ reservations: data.reservations });
   } catch (error) {
     console.error("Error carregant les reserves:", error);
     throw new Response("Error al carregar les reserves.", { status: 500 });

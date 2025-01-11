@@ -20,8 +20,6 @@ export default function ClientsAddPage() {
     )
 }
 
-
-
 export const action: ActionFunction = async ({ request }) => {
     const token = await getTokenFromRequest(request);
     const formData = await request.formData();

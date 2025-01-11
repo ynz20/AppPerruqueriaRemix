@@ -11,25 +11,59 @@ const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations }) => {
   }
 
   return (
-    <div>
-      <ul className="space-y-4">
+    <div className="p-4">
+      <div className="grid grid-cols-2 gap-4">
         {reservations.map((reservation) => (
-          <li
+          <div
             key={reservation.id}
-            className="border rounded-lg p-1 m-5 shadow-md bg-white-japan text-black-japan"
+            className="bg-gray-200 rounded-lg shadow-lg p-4 flex flex-col justify-between"
           >
-            <p><strong>ID:</strong> {reservation.id}</p>
-            <p><strong>Data:</strong> {reservation.date}</p>
-            <p><strong>Hora:</strong> {reservation.hour}</p>
-            <p><strong>Treballador:</strong> {reservation.worker_dni}</p>
-            <p><strong>Servei:</strong> {reservation.service_id}</p>
-            <p><strong>Client:</strong> {reservation.client_dni}</p>
-          </li>
+            <div>
+              <p className="text-sm text-gray-600 font-semibold">
+                {reservation.date} -- {reservation.hour}
+              </p>
+              <p>
+                <strong>Servei:</strong> {reservation.service_id}
+              </p>
+              <p className="text-sm">
+                <strong>Client:</strong> {reservation.client_dni}
+              </p>
+              <p>
+                <strong>Rating:</strong> {reservation.rating}
+              </p>
+              <p className="text-gray-800">
+                <strong>Comentari:</strong> {reservation.comment}
+              </p>
+            </div>
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex">
+                {Array.from({ length: reservation.rating }, (_, index) => (
+                  <svg
+                    key={index}
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    className="w-5 h-5 text-yellow-500"
+                  >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                  </svg>
+                ))}
+              </div>
+              <button
+                className="p-2 text-white rounded-full hover:bg-red-800"
+                onClick={() => console.log(`Eliminar reserva amb ID: ${reservation.id}`)}
+              >
+                🗑️
+              </button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
 
-
 export default ClientsHistory;
+
+
+
