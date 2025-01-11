@@ -36,6 +36,28 @@ export async function addService(serviceData: Service, token: string) {
 // Funció per obtenir els serveis
 export async function getServices(token: string) {
   try {
+    const response = await fetch("http://localhost:8085/api/services", {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return json(data);
+  } catch (err) {
+    throw new Error("Error en carregar els serveis. Intenta-ho més tard.");
+  }
+}
+
+// Funció per obtenir els serveis
+export async function getServicesNotAdmin(token: string) {
+  try {
     const response = await fetch("http://localhost:8085/api/services/pull", {
       method: "GET",
       headers: {

@@ -15,7 +15,7 @@ import { User } from "~/types/interfaces";
 import { getWorkerById, updateUser } from "~/data/worker.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const token = await getTokenFromRequest(request);
+  const token = await getTokenFromRequest(request) as string;
   const userId = await getUserIdFromRequest(request);
 
   if (!userId) {
