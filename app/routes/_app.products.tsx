@@ -22,14 +22,22 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function ProductsPage() {
   // Obtenir les dades carregades amb el loader
-  const { products, token } = useLoaderData<{ products: Product[]; token: string }>();
+  const { products, token } = useLoaderData<{
+    products: Product[];
+    token: string;
+  }>();
 
   return (
     <>
+      <head>
+        <title>Gestió de Productes</title>
+      </head>
       <Outlet />
       <main>
         <section>
-          <h1 className="text-2xl font-bold mb-4 text-black-japan">Gestió de Productes</h1>
+          <h1 className="text-2xl font-bold mb-4 text-black-japan">
+            Gestió de Productes
+          </h1>
 
           {/* Afegir nous productes */}
           <Link
@@ -40,7 +48,9 @@ export default function ProductsPage() {
           </Link>
         </section>
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-4 text-black-japan">Llista de Productes</h1>
+          <h1 className="text-2xl font-bold mb-4 text-black-japan">
+            Llista de Productes
+          </h1>
 
           {/* Llista de productes. Es passa el token com a prop al component ProductList */}
           <ProductList products={products} token={token} />

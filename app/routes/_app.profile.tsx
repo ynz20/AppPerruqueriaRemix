@@ -15,7 +15,7 @@ import { User } from "~/types/interfaces";
 import { getWorkerById, updateUser } from "~/data/worker.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const token = await getTokenFromRequest(request) as string;
+  const token = (await getTokenFromRequest(request)) as string;
   const userId = await getUserIdFromRequest(request);
 
   if (!userId) {
@@ -82,94 +82,104 @@ export default function Profile() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-2">
-      <h1 className="text-gray-800 text-3xl font-bold mb-8 mt-20">
-        El meu Perfil
-      </h1>
+    <>
+      <head>
+        <title>Gestió de Perfil</title>
+      </head>
+      <div className="max-w-3xl mx-auto p-2">
+        <h1 className="text-gray-800 text-3xl font-bold mb-8 mt-20">
+          El meu Perfil
+        </h1>
 
-      {actionData?.errors && (
-        <div className="bg-red-50 text-red-600 p-4 rounded mb-6 border border-red-200">
-          <ul>
-            {Object.entries(actionData.errors).map(([field, message]) => (
-              <li key={field}>
-                <strong className="capitalize">{field}:</strong> {message}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {actionData?.errors && (
+          <div className="bg-red-50 text-red-600 p-4 rounded mb-6 border border-red-200">
+            <ul>
+              {Object.entries(actionData.errors).map(([field, message]) => (
+                <li key={field}>
+                  <strong className="capitalize">{field}:</strong> {message}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
-      {showPopup && (
-        <div className="fixed top-4 right-4 bg-green-50 text-green-700 px-6 py-3 rounded-lg shadow-md">
-          {actionData?.success}
-        </div>
-      )}
+        {showPopup && (
+          <div className="fixed top-4 right-4 bg-green-50 text-green-700 px-6 py-3 rounded-lg shadow-md">
+            {actionData?.success}
+          </div>
+        )}
 
-      <Form method="post" className="space-y-3">
-        {[
-          { id: "name", label: "Nom", type: "text", value: user.name },
-          {
-            id: "surname",
-            label: "Cognoms",
-            type: "text",
-            value: user.surname,
-          },
-          { id: "nick", label: "Nom d'usuari", type: "text", value: user.nick },
-          {
-            id: "telf",
-            label: "Número de telèfon",
-            type: "text",
-            value: user.telf,
-          },
-          {
-            id: "email",
-            label: "Correu electrònic",
-            type: "email",
-            value: user.email,
-          },
-        ].map(({ id, label, type, value }) => (
-          <div key={id} className="flex flex-col space-y-2">
-            <label htmlFor={id} className="text-sm font-medium text-gray-700">
-              {label}
+        <Form method="post" className="space-y-3">
+          {[
+            { id: "name", label: "Nom", type: "text", value: user.name },
+            {
+              id: "surname",
+              label: "Cognoms",
+              type: "text",
+              value: user.surname,
+            },
+            {
+              id: "nick",
+              label: "Nom d'usuari",
+              type: "text",
+              value: user.nick,
+            },
+            {
+              id: "telf",
+              label: "Número de telèfon",
+              type: "text",
+              value: user.telf,
+            },
+            {
+              id: "email",
+              label: "Correu electrònic",
+              type: "email",
+              value: user.email,
+            },
+          ].map(({ id, label, type, value }) => (
+            <div key={id} className="flex flex-col space-y-2">
+              <label htmlFor={id} className="text-sm font-medium text-gray-700">
+                {label}
+              </label>
+              <input
+                type={type}
+                id={id}
+                name={id}
+                defaultValue={value}
+                required
+                className="px-4 py-2 border border-gray-300 rounded-md focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+              />
+            </div>
+          ))}
+
+          {/* Camp ocult per al DNI */}
+          <input type="hidden" name="dni" value={user.dni} />
+
+          <div className="flex flex-col space-y-2">
+            <label
+              htmlFor="password"
+              className="text-sm font-medium text-gray-700"
+            >
+              Nova contrasenya (opcional)
             </label>
             <input
-              type={type}
-              id={id}
-              name={id}
-              defaultValue={value}
-              required
+              type="password"
+              id="password"
+              name="password"
               className="px-4 py-2 border border-gray-300 rounded-md focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
             />
           </div>
-        ))}
 
-        {/* Camp ocult per al DNI */}
-        <input type="hidden" name="dni" value={user.dni} />
-
-        <div className="flex flex-col space-y-2">
-          <label
-            htmlFor="password"
-            className="text-sm font-medium text-gray-700"
-          >
-            Nova contrasenya (opcional)
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            className="px-4 py-2 border border-gray-300 rounded-md focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
-          />
-        </div>
-
-        <div className="flex justify-start">
-          <button
-            type="submit"
-            className="px-6 py-2 bg-red-japan text-white font-medium rounded-md hover:bg-black-japan focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            Desar
-          </button>
-        </div>
-      </Form>
-    </div>
+          <div className="flex justify-start">
+            <button
+              type="submit"
+              className="px-6 py-2 bg-red-japan text-white font-medium rounded-md hover:bg-black-japan focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              Desar
+            </button>
+          </div>
+        </Form>
+      </div>
+    </>
   );
 }

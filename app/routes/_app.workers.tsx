@@ -21,6 +21,9 @@ export default function WorkersPage() {
   const { users } = useLoaderData<{ users: User[] }>();
   return (
     <>
+      <head>
+        <title>Gestió de Treballadors</title>
+      </head>
       <Outlet />
       <main>
         <section>

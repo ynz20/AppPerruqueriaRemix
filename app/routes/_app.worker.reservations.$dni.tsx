@@ -39,9 +39,6 @@ export default function ReservationsClientPage() {
         <span>Tornar Enrere</span>
       </Link>
       <div className="p-4">
-        <h2 className="text-xl font-bold text-center mb-4 text-black">
-          Reserves gestionades pel treballador
-        </h2>
         <ReservationsHistory reservations={reservations} />
       </div>
     </>

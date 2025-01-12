@@ -6,19 +6,21 @@ import { Service } from "~/types/interfaces";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
 
 export const loader: LoaderFunction = async ({ request }) => {
-    const token = await getTokenFromRequest(request);
-    if (!token) {
-      throw new Response("Inicia sessió per accedir.", { status: 401 });
-    }
-    const services = await getServices(token);
-    return services;
-
+  const token = await getTokenFromRequest(request);
+  if (!token) {
+    throw new Response("Inicia sessió per accedir.", { status: 401 });
+  }
+  const services = await getServices(token);
+  return services;
 };
 
 export default function ServicesPage() {
   const { services } = useLoaderData<{ services: Service[] }>();
   return (
     <>
+      <head>
+        <title>Gestió de Serveis</title>
+      </head>
       <Outlet />
       <main>
         <section>

@@ -59,7 +59,6 @@
    - S'ha afegit un missatge dinàmic visible durant el procés de creació de reserves per informar sobre la necessitat d'obrir un torn.
 2. **Historial de Reserves:**
    - S'ha afegit una capçalera descriptiva a les seccions de clients i treballadors.
-   - S'ha inclòs un text explicatiu a la secció de torns.
 
 ### Beneficis Aportats
 - **Accessibilitat:** S'han reduït les confusions derivades d'una mala interpretació de les funcionalitats.
