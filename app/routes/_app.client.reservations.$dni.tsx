@@ -29,12 +29,10 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
 export default function ReservationsClientPage() {
   const { reservations } = useLoaderData<LoaderData>();
-
+  console.log(reservations);
   return (
     <>
-      <head>
-        <title>Gestió d&apos;historial</title>
-      </head>
+
       <Link
         to="../clients"
         className="inline-flex items-center rounded bg-red-japan px-4 py-2 text-white-japan shadow-md hover:text-yellow-japan"
@@ -42,9 +40,6 @@ export default function ReservationsClientPage() {
         <span>Tornar Enrere</span>
       </Link>
       <div className="p-4">
-        <h2 className="text-xl font-bold text-center mb-4 text-black">
-          Reserves del Client
-        </h2>
         <ReservationsHistory reservations={reservations} />
       </div>
     </>
