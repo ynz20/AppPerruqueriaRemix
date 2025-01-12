@@ -1,6 +1,7 @@
 import { Outlet, Link, Form, useLoaderData } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
 import { getUserRoleFromRequest } from "~/utils/sessionUtils";
+import { useState } from "react";
 
 // Loader per obtenir el rol de l'usuari
 export const loader: LoaderFunction = async ({ request }) => {
@@ -11,11 +12,31 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Layout() {
   const { role } = useLoaderData<{ role: number | null }>();
 
+  // Estat per controlar l'obertura i tancament del menú hamburguesa
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div className="flex h-screen">
       {/* BARRA DE NAVEGACIÓ lateral amb links */}
-      <nav className="w-1/5 bg-black-japan text-white-japan flex flex-col items-center justify-center">
-        <ul className="space-y-6">
+      <nav className="w-full sm:w-1/5 bg-black-japan text-white-japan flex flex-col items-center justify-center">
+        {/* Botó de menú hamburguesa */}
+        <button
+          className="sm:hidden text-3xl absolute top-4 left-4"
+          onClick={toggleMenu}
+        >
+          ☰
+        </button>
+        
+        {/* Menú desplegable per pantalles petites */}
+        <ul
+          className={`${
+            isMenuOpen ? "block" : "hidden"
+          } sm:block space-y-6 sm:space-y-8 mt-10 sm:mt-0`}
+        >
           {/* Rol User */}
           {role === 0 && (
             <>
@@ -119,7 +140,7 @@ export default function Layout() {
             <Form method="post" action="/logout">
               <button
                 type="submit"
-                className=" absolute bottom-12 text-lg text-yellow-japan font-semibold hover:text-red-japan transition"
+                className="text-lg text-yellow-japan font-semibold hover:text-red-japan transition"
               >
                 {role === 0 ? "Tanca sessió" : "Sortir"}
               </button>

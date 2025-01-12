@@ -1,17 +1,32 @@
 import { Link, useFetcher } from "@remix-run/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ProductListProps } from "~/types/interfaces";
 
-
 export default function ProductList({ products, token }: ProductListProps) {
-  const [filter, setFilter] = useState<string>(""); // Estat per gestionar el filtre
-  const [currentPage, setCurrentPage] = useState<number>(1); // Estat per la pàgina actual
-
-  const ITEMS_PER_PAGE = 4; // Nombre d'elements per pàgina
-
   const fetcher = useFetcher();
+  const [filter, setFilter] = useState<string>(""); // Filtre
+  const [currentPage, setCurrentPage] = useState<number>(1); // Pàgina actual
+  const [itemsPerPage, setItemsPerPage] = useState<number>(4); // Elements per pàgina (dinàmics)
 
-  // Filtrar els productes basant-se en el text introduït al filtre
+  // Actualitzar el nombre d'elements per pàgina segons la mida de la pantalla
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(1); // Pantalles petites: 1 producte per pàgina
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(3); // Pantalles mitjanes: 3 productes per pàgina
+      } else {
+        setItemsPerPage(4); // Pantalles grans: 4 productes per pàgina
+      }
+    };
+
+    updateItemsPerPage(); // Executar quan es munta el component
+    window.addEventListener("resize", updateItemsPerPage); // Escoltar canvis de mida de pantalla
+
+    return () => window.removeEventListener("resize", updateItemsPerPage); // Netejar esdeveniment en desmuntar
+  }, []);
+
+  // Filtrar productes segons el terme del filtre
   const filteredProducts = Array.isArray(products)
     ? products.filter(
         (product) =>
@@ -21,27 +36,26 @@ export default function ProductList({ products, token }: ProductListProps) {
     : [];
 
   // Calcular el nombre total de pàgines
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
 
-  // Obtenir els productes de la pàgina actual
+  // Productes per a la pàgina actual
   const paginatedProducts = filteredProducts.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
-  // Funció per anar a la pàgina anterior
+  // Funcions de navegació
   const handlePreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  // Funció per anar a la pàgina següent
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   return (
     <div className="p-4">
-      {/* Filtre per cercar productes */}
+      {/* Filtre */}
       <div className="mb-4">
         <label
           htmlFor="filter"
@@ -59,16 +73,14 @@ export default function ProductList({ products, token }: ProductListProps) {
         />
       </div>
 
-      {/* Llista de productes paginada */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* Llista de productes */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         {paginatedProducts.map((product) => (
           <div
             key={product.id}
             className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 mx-1"
           >
-            <h2 className="text-lg font-bold text-white-japan">
-              {product.name}
-            </h2>
+            <h2 className="text-lg font-bold text-white-japan">{product.name}</h2>
             <p className="text-sm text-white-japan">{product.description}</p>
             <p className="text-sm text-white-japan">Preu: {product.price}€</p>
 
@@ -149,11 +161,11 @@ export default function ProductList({ products, token }: ProductListProps) {
         ))}
       </div>
 
-      {/* Navegació entre pàgines */}
+      {/* Navegació de pàgines */}
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={handlePreviousPage}
-          disabled={currentPage === 1} // Deshabilitat a la primera pàgina
+          disabled={currentPage === 1}
           className={`px-4 py-2 rounded-md text-white ${
             currentPage === 1
               ? "bg-gray-500 cursor-not-allowed"
@@ -167,7 +179,7 @@ export default function ProductList({ products, token }: ProductListProps) {
         </span>
         <button
           onClick={handleNextPage}
-          disabled={currentPage === totalPages} // Deshabilitat a l'última pàgina
+          disabled={currentPage === totalPages}
           className={`px-4 py-2 rounded-md text-white ${
             currentPage === totalPages
               ? "bg-gray-500 cursor-not-allowed"

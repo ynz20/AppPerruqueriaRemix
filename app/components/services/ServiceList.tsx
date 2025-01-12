@@ -1,12 +1,29 @@
 import { Link } from "@remix-run/react";
 import { ServiceListProps } from "~/types/interfaces";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ServiceList({ services }: ServiceListProps) {
-  const [filter, setFilter] = useState<string>("");
+  const [filter, setFilter] = useState<string>(""); // Filtre
   const [currentPage, setCurrentPage] = useState<number>(1); // Pàgina actual
+  const [itemsPerPage, setItemsPerPage] = useState<number>(4); // Elements per pàgina (dinàmics)
 
-  const ITEMS_PER_PAGE = 4; // Serveis per pàgina
+  // Actualitzar el nombre d'elements per pàgina segons la mida de la pantalla
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(1); // Pantalles petites: 1 servei per pàgina
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(3); // Pantalles mitjanes: 4 serveis per pàgina
+      } else {
+        setItemsPerPage(8); // Pantalles grans: 8 serveis per pàgina
+      }
+    };
+
+    updateItemsPerPage(); // Executar quan es munta el component
+    window.addEventListener("resize", updateItemsPerPage); // Escoltar canvis de mida de pantalla
+
+    return () => window.removeEventListener("resize", updateItemsPerPage); // Netejar esdeveniment en desmuntar
+  }, []);
 
   // Filtrar serveis segons el terme del filtre
   const filteredServices = services?.filter(
@@ -15,15 +32,15 @@ export default function ServiceList({ services }: ServiceListProps) {
       service.description.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Calcular número total de pàgines
+  // Calcular el nombre total de pàgines
   const totalPages = Math.ceil(
-    (filteredServices?.length || 0) / ITEMS_PER_PAGE
+    (filteredServices?.length || 0) / itemsPerPage
   );
 
   // Serveis per a la pàgina actual
   const paginatedServices = filteredServices?.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   // Funcions de navegació
@@ -51,7 +68,7 @@ export default function ServiceList({ services }: ServiceListProps) {
           value={filter}
           onChange={(e) => {
             setFilter(e.target.value);
-            setCurrentPage(1); // Reiniciar a la primera pàgina al filtrar
+            setCurrentPage(1); // Reiniciar a la primera pàgina en filtrar
           }}
           placeholder="Cercar per nom o descripció"
           className="mt-1 block w-full rounded-md border bg-red-japan text-white-japan p-2 shadow-sm placeholder-white-japan"

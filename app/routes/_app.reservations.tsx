@@ -41,7 +41,10 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function ReservationsPage() {
-  const { reservations, token } = useLoaderData<{ reservations: Reservation[]; token: string }>();
+  const { reservations, token } = useLoaderData<{
+    reservations: Reservation[];
+    token: string;
+  }>();
 
   // Estat per gestionar si el torn està obert o tancat
   const [isOpen, setIsOpen] = useState(false);
@@ -126,28 +129,35 @@ export default function ReservationsPage() {
     <>
       <Outlet context={{ token, refreshReservations }} />
       <div>
-        {/* Nova Reserva */}
-        <Link
-          to="add"
-          className="inline-flex items-center rounded bg-red-japan px-4 py-2 text-white-japan shadow-md hover:text-yellow-japan"
-        >
-          <span className="ml-2">Afegir Reserva</span>
-        </Link>
-
         <h1 className="text-2xl font-bold text-black">Llista de Reserves</h1>
-        <button
-          onClick={toggleTurn}
-          disabled={isLoading} // Deshabilitar el botó mentre es processa
-          className={`mt-4 rounded px-4 py-2 text-white ${
-            isLoading
-              ? "bg-gray-500"
+        <div className="flex justify-between items-center gap-4 mt-4">
+          {/* Botón de Afegir Reserva */}
+          <Link
+            to="add"
+            className="flex items-center justify-center rounded bg-red-japan px-4 py-2 text-white shadow-md hover:bg-red-700 h-10"
+          >
+            <span>Afegir Reserva</span>
+          </Link>
+
+          {/* Botón de Obrir/Tancar Torn */}
+          <button
+            onClick={toggleTurn}
+            disabled={isLoading}
+            className={`rounded px-4 py-2 text-white h-10 ${
+              isLoading
+                ? "bg-gray-500"
+                : isOpen
+                ? "bg-red-japan hover:bg-red-700"
+                : "bg-black-japan hover:bg-blue-700"
+            }`}
+          >
+            {isLoading
+              ? "Processant..."
               : isOpen
-              ? "bg-red-500 hover:bg-red-700"
-              : "bg-blue-500 hover:bg-blue-700"
-          }`}
-        >
-          {isLoading ? "Processant..." : isOpen ? "Tancar Torn" : "Obrir Torn"}
-        </button>
+              ? "Tancar Torn"
+              : "Obrir Torn"}
+          </button>
+        </div>
 
         <ReservationList
           reservations={reservations}

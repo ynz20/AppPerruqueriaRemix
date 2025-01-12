@@ -1,13 +1,30 @@
 import { Link, useFetcher } from "@remix-run/react";
 import { ClientListProps } from "~/types/interfaces";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ClientList({ clients }: ClientListProps) {
   const [filter, setFilter] = useState<string>(""); // Estat per emmagatzemar el filtre de text
   const [currentPage, setCurrentPage] = useState<number>(1); // Estat per la pàgina actual
+  const [itemsPerPage, setItemsPerPage] = useState<number>(12); // Elements per pàgina dinàmics
   const fetcher = useFetcher();
 
-  const ITEMS_PER_PAGE = 12; // 4 columnes x 3 files = 12 clients per pàgina
+  // Ajustar el número d’elements per pàgina segons la mida de la pantalla
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(3); // Pantalles petites: 3 targetes
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(6); // Pantalles mitjanes: 6 targetes (2 columnes)
+      } else {
+        setItemsPerPage(12); // Pantalles grans: 12 targetes (4 columnes)
+      }
+    };
+
+    updateItemsPerPage(); // Inicialització
+    window.addEventListener("resize", updateItemsPerPage);
+
+    return () => window.removeEventListener("resize", updateItemsPerPage); // Cleanup
+  }, []);
 
   // Filtrar els clients segons el text introduït al filtre
   const filteredClients = clients?.filter(
@@ -18,12 +35,12 @@ export default function ClientList({ clients }: ClientListProps) {
   );
 
   // Calcular el nombre total de pàgines
-  const totalPages = Math.ceil((filteredClients?.length || 0) / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil((filteredClients?.length || 0) / itemsPerPage);
 
   // Obtenir els clients corresponents a la pàgina actual
   const paginatedClients = filteredClients?.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   // Funció per anar a la pàgina anterior
@@ -60,11 +77,11 @@ export default function ClientList({ clients }: ClientListProps) {
       </div>
 
       {/* Llista de clients paginada */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {paginatedClients?.map((client) => (
           <div
             key={client.dni} // Identificador únic per cada client
-            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 mx-1 hover:bg-red-japan"
+            className="rounded-lg border border-gray-300 bg-black-japan shadow-md p-4 hover:bg-red-japan"
           >
             <h2 className="text-lg font-bold text-white-japan">
               {client.name} {client.surname}

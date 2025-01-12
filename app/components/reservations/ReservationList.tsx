@@ -80,12 +80,13 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
         height: "80vh", // Altura completa de la vista
         padding: "10px",
         borderRadius: "8px",
+        overflowX: "auto", // Permetre el desplaçament horitzontal si cal
       }}
     >
       <style>
         {`
         .fc-col-header {
-          background-color: #8A0303;
+          background-color: #1A202C;
         }
         .fc-scrollgrid-section-body td,
         .fc-scrollgrid-section-body th {
@@ -95,11 +96,11 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           border-color: black;
         }
         .fc-daygrid-day-number {
-          color: #8A0303;
+          color: #1A202C;
           font-weight: bold;
         }
         .fc-toolbar-title {
-          color: #8A0303;
+          color: #1A202C;
           font-weight: bold;
         }
         .fc-button-group .fc-button {
@@ -128,6 +129,9 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
           .fc-toolbar .fc-toolbar-chunk {
             margin-bottom: 10px;
           }
+          .fc-daygrid {
+            overflow-x: scroll; /* Afegir desplaçament horitzontal en pantalles petites */
+          }
         }
       `}
       </style>
@@ -139,7 +143,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
         eventClick={handleEventClick}
         eventClassNames={(info) => getEventClass(info.event.extendedProps.status)}
         height="100%" // Altura al 100% del contenedor
-        contentHeight="auto" // Ajusta el contenido automáticamente
+        contentHeight="auto" // Ajusta el contingut automàticament
         headerToolbar={{
           left: "prev,next today",
           center: "title",
@@ -162,7 +166,6 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       />
     </div>
   );
-  
 };
 
 export default ReservationCalendar;

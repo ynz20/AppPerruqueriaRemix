@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User } from "~/types/interfaces";
 
 interface WorkersListProps {
@@ -9,7 +9,25 @@ interface WorkersListProps {
 export default function WorkersList({ workers }: WorkersListProps) {
   const [filter, setFilter] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1); // Estat per la pàgina actual
-  const ITEMS_PER_PAGE = 12; // 4 columnes x 3 files = 12 treballadors per pàgina
+  const [itemsPerPage, setItemsPerPage] = useState<number>(12); // Nombre d'elements per pàgina (dinàmic)
+
+  // Actualitzar el nombre d'elements per pàgina segons la mida de la pantalla
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (window.innerWidth < 640) {
+        setItemsPerPage(4); // Pantalles petites: 1 columna, 4 files
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(12); // Pantalles mitjanes: 3 columnes
+      } else {
+        setItemsPerPage(16); // Pantalles grans: 4 columnes
+      }
+    };
+
+    updateItemsPerPage(); // Executar quan es munta el component
+    window.addEventListener("resize", updateItemsPerPage); // Escoltar canvis de mida de pantalla
+
+    return () => window.removeEventListener("resize", updateItemsPerPage); // Netejar esdeveniment en desmuntar
+  }, []);
 
   // Filtrar els treballadors basant-se en el text introduït al filtre
   const filteredWorkers = workers?.filter(
@@ -20,12 +38,12 @@ export default function WorkersList({ workers }: WorkersListProps) {
   );
 
   // Calcular el nombre total de pàgines
-  const totalPages = Math.ceil((filteredWorkers?.length || 0) / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil((filteredWorkers?.length || 0) / itemsPerPage);
 
   // Obtenir els treballadors de la pàgina actual
   const paginatedWorkers = filteredWorkers?.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
   );
 
   // Funcions per navegar entre pàgines
@@ -60,9 +78,9 @@ export default function WorkersList({ workers }: WorkersListProps) {
         />
       </div>
 
-      {/* Llista de treballadors */}
+      {/* Llista de treballadors amb disseny dinàmic segons mida de pantalla */}
       <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4"
         style={{ maxHeight: "400px", overflowY: "auto" }}
       >
         {paginatedWorkers?.map((worker) => (
