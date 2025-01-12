@@ -7,6 +7,8 @@
    En aquesta fase no hi ha hagut cap problema en fer-ne ús. Totalment intuïtiu, tant el registre com el login.
 
 2. **Gestió de Reserves**
+   Accessibilitat de les reserves segons el LightHouse: 100%
+   
    Interpretació inicial força bé. No s'esperaven (la gent amb poca experiencia amb la tecnología) que les reserves afegides apareixin al calendari. Per afegir reserves cap problema. El boto per afegir reserves está ben situat i el procés de creació i finalitzacio de reserves bastant intuitiu també.
    L'inconvenient ha sigut el torn, que no entenien quina era la seva útilitat (La reserva et dona un error indicant de que obris el torn abans de finalitzar reserva).
 
