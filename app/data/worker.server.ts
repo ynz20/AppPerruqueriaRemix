@@ -196,7 +196,7 @@ export async function updateUser(
   });
 
   if (!response.ok) {
-    const errorData = await response.json();;
+    const errorData = await response.json();
     throw json(errorData, { status: response.status });
   }
 
