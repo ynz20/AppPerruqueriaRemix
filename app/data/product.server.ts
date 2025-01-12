@@ -116,3 +116,32 @@ export async function decrementProductStock(productId: string, token: string) {
     });
   }
 }
+
+export async function deleteProduct(productId: string, token: string) {
+  if (!token) {
+    throw new Response("Inicia sessió per accedir.", { status: 401 });
+  }
+
+  try {
+    const response = await fetch(`${BASE_URL}/${productId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Comprovar si la resposta no és satisfactòria
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    // Retornar un missatge d'èxit si l'operació és correcta
+    return json({ message: "Producte eliminat correctament." });
+  } catch (err) {
+    throw new Response("Error en eliminar el producte. Intenta-ho més tard.", {
+      status: 500,
+    });
+  }
+}
+
