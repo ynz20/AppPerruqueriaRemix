@@ -53,6 +53,7 @@ export interface ReservationListProps {
   reservations: Reservation[];
 }
 
+
 export interface ReservationData {
   worker_dni: string | null;
   client_dni: string | null;

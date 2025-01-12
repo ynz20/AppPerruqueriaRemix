@@ -1,33 +1,40 @@
 import { Form, redirect, useActionData } from "@remix-run/react";
-import { ActionFunction, json } from "@remix-run/node";
-import { sessionStorage } from "../utils/sessionUtils";
+import { ActionFunction, LoaderFunction, json } from "@remix-run/node";
+import { sessionStorage, getTokenFromRequest } from "../utils/sessionUtils";
 import { ActionData } from "~/types/interfaces";
 import { login } from "~/data/worker.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const token = await getTokenFromRequest(request);
+
+  // Si ja hi ha un token, redirigir a /reservations
+  if (token) {
+    return redirect("/reservations");
+  }
+
+  // Si no hi ha token, permetre l'accés a la pàgina de login
+  return null;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
   const identifier = formData.get("identifier");
   const password = formData.get("password");
 
-  // Detectar si l'entrada és un correu electrònic o un nom d'usuari
-  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier as string);
+  const isEmail = /^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(identifier as string);
 
-  // Crear objecte de dades en funció de si és email o nick
   const data = isEmail
     ? { email: identifier as string, password: password as string }
     : { nick: identifier as string, password: password as string };
 
   try {
-    // Realitza el procés de login
     const result = await login(data);
 
-    // Configurar la sessió amb les dades de l'usuari
     const session = await sessionStorage.getSession();
-    session.set("token", result.token); // Guardar el token
-    session.set("role", result.role);  // Guardar el rol de l'usuari
-    session.set("user_id", result.user_id); // Guardar l'ID de l'usuari
+    session.set("token", result.token);
+    session.set("role", result.role);
+    session.set("user_id", result.user_id);
 
-    // Guardar les cookies de la sessió i redirigir
     const setCookie = await sessionStorage.commitSession(session);
     return redirect("/reservations", {
       headers: {
@@ -36,12 +43,9 @@ export const action: ActionFunction = async ({ request }) => {
       status: 302,
     });
   } catch (error: unknown) {
-    // Capturar i retornar errors al client
-    const errorMessage = error instanceof Error ? error.message : "Error inesperat. Torna-ho a intentar més tard.";
-    return json(
-      { error: errorMessage },
-      { status: 400 }
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : "Error inesperat. Torna-ho a intentar més tard.";
+    return json({ error: errorMessage }, { status: 400 });
   }
 };
 
@@ -50,7 +54,6 @@ export default function Login() {
 
   return (
     <div className="flex h-screen">
-      {/* Menú lateral amb benvinguda */}
       <div className="w-1/3 bg-black-japan text-yellow-japan flex flex-col items-center justify-center">
         <div className="text-center">
           <img
@@ -62,8 +65,6 @@ export default function Login() {
           <h2 className="text-3xl">IES Cirvianum!</h2>
         </div>
       </div>
-
-      {/* Formulari de login */}
       <div className="w-2/3 bg-white-japan flex flex-col items-center justify-center">
         <div className="w-2/3 max-w-lg p-10">
           <h1 className="text-4xl font-bold text-red-japan text-center mb-6">
@@ -76,7 +77,6 @@ export default function Login() {
           )}
           <Form method="post">
             <div className="mb-6">
-              {/* Camp per introduir el correu electrònic o nom d'usuari */}
               <input
                 type="text"
                 id="identifier"
@@ -87,7 +87,6 @@ export default function Login() {
               />
             </div>
             <div className="mb-6">
-              {/* Camp per introduir la contrasenya */}
               <input
                 type="password"
                 id="password"
@@ -98,7 +97,6 @@ export default function Login() {
               />
             </div>
             <div className="text-center mb-6">
-              {/* Enllaç per crear un compte nou */}
               <p className="text-sm text-black">
                 No tens compte?{" "}
                 <a href="/register" className="text-red-japan underline">

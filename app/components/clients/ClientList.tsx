@@ -114,7 +114,7 @@ export default function ClientList({ clients }: ClientListProps) {
         >
           Anterior
         </button>
-        <span className="text-white">
+        <span className="text-black-japan">
           Pàgina {currentPage} de {totalPages}
         </span>
         <button

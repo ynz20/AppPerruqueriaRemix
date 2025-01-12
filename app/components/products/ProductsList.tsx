@@ -162,7 +162,7 @@ export default function ProductList({ products, token }: ProductListProps) {
         >
           Anterior
         </button>
-        <span className="text-white">
+        <span className="text-black">
           Pàgina {currentPage} de {totalPages}
         </span>
         <button
