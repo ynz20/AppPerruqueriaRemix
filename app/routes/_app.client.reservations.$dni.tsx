@@ -32,6 +32,9 @@ export default function ReservationsClientPage() {
 
   return (
     <>
+      <head>
+        <title>Gestió d&apos;historial</title>
+      </head>
       <Link
         to="../clients"
         className="inline-flex items-center rounded bg-red-japan px-4 py-2 text-white-japan shadow-md hover:text-yellow-japan"
