@@ -13,7 +13,6 @@ export async function getShifts(token: string) {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log('aixo hauria de funcionar ', data.shifts[0].reservations);
     return data;
   } catch (error) {
     throw new Error("Error en carregar els torns. Intenta-ho més tard.");

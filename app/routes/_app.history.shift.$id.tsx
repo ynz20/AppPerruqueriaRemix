@@ -40,7 +40,7 @@ export default function ShiftReservationsPage() {
     const { reservations } = useLoaderData<Shift >();
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Reserves del Torn</h2>
+            <h2 className="text-2xl font-bold mb-4 text-black-japan">Reserves del Torn</h2>
             <TornsReservations reservations={reservations} />
         </div>
     );

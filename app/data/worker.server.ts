@@ -79,7 +79,6 @@ export async function getWorkers(token: string) {
     }
 
     const data = await response.json();
-    console.log(data);
     return json(data);
   } catch (error) {
     throw new Response(
@@ -106,7 +105,6 @@ export async function getWorkersnotAdmin(token: string) {
     }
 
     const data = await response.json();
-    console.log(data);
     return json(data);
   } catch (error) {
     throw new Response(
@@ -153,7 +151,6 @@ export async function updateWorker(
     }
 
     const data = await response.json();
-    console.log(data);
     return json(data);
   } catch (error) {
     throw new Response(
@@ -199,8 +196,7 @@ export async function updateUser(
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
-    console.log(errorData);
+    const errorData = await response.json();;
     throw json(errorData, { status: response.status });
   }
 

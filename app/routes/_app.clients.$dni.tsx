@@ -48,7 +48,6 @@ export const action: ActionFunction = async ({ request }) => {
     // Obtenir les reserves associades al client
     const reservesClient = await getReservationsByDNI(token, dni);
 
-    console.log(reservesClient); // Mostrar les reserves per depuració
 
     if (reservesClient.reservations && reservesClient.reservations.length === 0) {
       // Eliminar el client si no té reserves actives

@@ -105,7 +105,7 @@ export default function WorkersList({ workers }: WorkersListProps) {
         >
           Anterior
         </button>
-        <span className="text-white">
+        <span className="text-black-japan">
           Pàgina {currentPage} de {totalPages}
         </span>
         <button

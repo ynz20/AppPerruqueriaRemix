@@ -119,7 +119,7 @@ export default function Layout() {
             <Form method="post" action="/logout">
               <button
                 type="submit"
-                className=" absolute bottom-12 text-lg text-red-500 font-semibold hover:text-red-400 transition"
+                className=" absolute bottom-12 text-lg text-yellow-japan font-semibold hover:text-red-japan transition"
               >
                 {role === 0 ? "Tanca sessió" : "Sortir"}
               </button>
