@@ -39,11 +39,16 @@ export default function ClientsPage() {
 
   return (
     <>
+      <head>
+        <title>Gestió de Clients</title>
+      </head>
       <ToastContainer />
       <Outlet />
       <main>
         <section>
-          <h1 className="text-2xl font-bold mb-2 text-black">Gestió de Clients</h1>
+          <h1 className="text-2xl font-bold mb-2 text-black">
+            Gestió de Clients
+          </h1>
           <Link
             to="add"
             className="inline-flex items-center rounded bg-red-japan px-4 py-1 text-white-japan shadow-md hover:text-yellow-japan"
@@ -52,7 +57,9 @@ export default function ClientsPage() {
           </Link>
         </section>
         <div className="p-6">
-          <h1 className="text-2xl font-bold mb-1 text-black">Llista de Clients</h1>
+          <h1 className="text-2xl font-bold mb-1 text-black">
+            Llista de Clients
+          </h1>
           <ClientList clients={clients} />
         </div>
       </main>
