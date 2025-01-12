@@ -33,5 +33,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   await addProduct(productData, token);
 
-  return redirect("/products");
+  // Redirigir amb un paràmetre d'èxit
+  return redirect("/products?success=Producte%20afegit%20correctament");
 };
+
