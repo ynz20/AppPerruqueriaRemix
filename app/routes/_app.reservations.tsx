@@ -127,6 +127,9 @@ export default function ReservationsPage() {
 
   return (
     <>
+      <head>
+        <title>Gestió de Reserves</title>
+      </head>
       <Outlet context={{ token, refreshReservations }} />
       <div>
         <h1 className="text-2xl font-bold text-black">Llista de Reserves</h1>
