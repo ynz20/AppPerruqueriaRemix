@@ -60,7 +60,8 @@ export default function Login() {
         <title>Inicia Sessió</title>
       </head>
       <div className="flex h-screen">
-        <div className="w-1/3 bg-black-japan text-yellow-japan flex flex-col items-center justify-center">
+        {/* Aquest div desapareix en pantalles petites */}
+        <div className="hidden md:flex w-1/3 bg-black-japan text-yellow-japan flex-col items-center justify-center">
           <div className="text-center">
             <img
               src="../../public/haircutLogo.png"
@@ -71,7 +72,7 @@ export default function Login() {
             <h2 className="text-3xl">IES Cirvianum!</h2>
           </div>
         </div>
-        <div className="w-2/3 bg-white-japan flex flex-col items-center justify-center">
+        <div className="w-full md:w-2/3 bg-white-japan flex flex-col items-center justify-center">
           <div className="w-2/3 max-w-lg p-10">
             <h1 className="text-4xl font-bold text-red-japan text-center mb-6">
               Benvingut/da!

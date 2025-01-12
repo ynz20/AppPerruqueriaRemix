@@ -64,8 +64,8 @@ export default function Register() {
         <title>Registra&apos;t!</title>
       </head>
       <div className="flex min-h-screen overflow-hidden">
-        {/* Menú Lateral */}
-        <div className="w-1/3 bg-black-japan text-yellow-japan flex flex-col items-center justify-center">
+        {/* Menú Lateral: ocult a pantalles petites */}
+        <div className="hidden md:flex w-1/3 bg-black-japan text-yellow-japan flex-col items-center justify-center">
           <div className="text-center px-6">
             <img
               src="../../public/haircutLogo.png"
@@ -78,9 +78,9 @@ export default function Register() {
         </div>
 
         {/* Formulari de registre */}
-        <div className="w-2/3 bg-[#faf8e8] flex flex-col items-center justify-center">
+        <div className="w-full md:w-2/3 bg-[#faf8e8] flex flex-col items-center justify-center">
           <div className="w-3/4 max-w-lg p-8">
-            <h1 className="text-3xl font-bold text-red-700 text-center mb-6">
+            <h1 className="text-3xl font-bold text-red-japan text-center mb-6">
               Benvingut/da!
             </h1>
             <Form method="post">
