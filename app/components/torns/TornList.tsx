@@ -10,8 +10,6 @@ export default function TornList({ shifts = [] }: ShiftListProps) {
                     return sum + (parseFloat(reservation.service.price.toString()) || 0);
                 }, 0);
 
-                console.log(`Total per Torn #${shift.id}: ${totalReservations.toFixed(2)}`);
-
                 return (
                     <div
                         key={shift.id}

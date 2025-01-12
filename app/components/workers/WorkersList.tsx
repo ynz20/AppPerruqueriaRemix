@@ -74,12 +74,18 @@ export default function WorkersList({ workers }: WorkersListProps) {
               {worker.name} {worker.surname}
             </h2>
             <p className="text-sm text-white-japan">DNI: {worker.dni}</p>
-            <div className="mt-4 text-right">
+            <div className="flex justify-between items-center">
               <Link
                 to={`../workers/${worker.dni}`}
                 className="text-white-japan hover:text-blue-700 text-sm font-semibold"
               >
                 Editar ✏️
+              </Link>
+              <Link
+                to={`../worker/reservations/${worker.dni}`}
+                className="text-white-japan hover:text-green-500 text-sm font-semibold flex items-center space-x-1"
+              >
+                📜 <span>Historial</span>
               </Link>
             </div>
           </div>

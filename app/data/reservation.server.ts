@@ -1,6 +1,7 @@
 import { ReservationData } from "~/types/interfaces";
 
 
+//Funcio per afegir reserves a la BBDD
 export async function addReservation(reservationData: ReservationData, token: string) {
 
   if (!token) {

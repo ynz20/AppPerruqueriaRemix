@@ -7,11 +7,8 @@ import {
     useMatches,
   } from "@remix-run/react";
   import React from "react";
-  import { User } from "~/types/interfaces";
+  import { User, ValidationErrors } from "~/types/interfaces";
   
-  interface ValidationErrors {
-    [key: string]: string;
-  }
   
   const WorkerForm: React.FC = () => {
     const navigation = useNavigation();

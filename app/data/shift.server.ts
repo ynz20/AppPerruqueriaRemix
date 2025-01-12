@@ -1,3 +1,4 @@
+//Funcio per obtenir els torns
 export async function getShifts(token: string) {
   try {
     const response = await fetch("http://localhost:8085/api/shifts", {
@@ -19,6 +20,7 @@ export async function getShifts(token: string) {
   }
 }
 
+//Funcio per veure si el torn actual esta obert/tencat
 export async function revisarTorn(token: string) {
   if (!token) {
     throw new Response("Inicia sessió per accedir.", { status: 401 });
@@ -48,6 +50,7 @@ export async function revisarTorn(token: string) {
   return data.active;
 }
 
+//Funcio per obrir/tencar torns
 export async function alternarTorn(token: string) {
   if (!token) {
     throw new Response("Inicia sessió per accedir.", { status: 401 });
