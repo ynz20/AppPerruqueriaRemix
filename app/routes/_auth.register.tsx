@@ -1,10 +1,12 @@
 import { ActionFunction, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { userFormValidator } from "~/data/validacio.server";
+import { register } from "~/data/worker.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
 
+  // Crear objecte amb les dades del formulari
   const data = {
     dni: formData.get("dni") as string,
     name: formData.get("name") as string,
@@ -14,50 +16,44 @@ export const action: ActionFunction = async ({ request }) => {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
     password_confirmation: formData.get("password") as string,
-    role: false
+    role: false,
   };
-  const  { valid, errors } = userFormValidator(data);
-    if (!valid) {
-        console.log("error", errors);
-        return {errors};
-    }
+
+  // Validar les dades del formulari
+  const { valid, errors } = userFormValidator(data);
+  if (!valid) {
+    return { errors }; // Retornar els errors al frontend
+  }
 
   try {
-    const response = await fetch("http://localhost:8085/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    // Enviar les dades al servidor per registrar l'usuari
+    const resultat = await register(data);
 
-    if (!response.ok) {
-      const error = await response.json();
-      return json({ error: error.message || "Error en el registre." }, { status: response.status });
-    }
-    const resultat = await response.json();
-
-    if (resultat.id == 1){
+    // Comprovar possibles errors específics del backend (DNI, nick, correu i telèfon que siguin únics)
+    if (resultat.id == 1) {
       errors.dni = resultat.message;
-      return {errors}
-    } else if(resultat.id == 2) {
+      return { errors };
+    } else if (resultat.id == 2) {
       errors.nick = resultat.message;
-      return {errors}
+      return { errors };
     } else if (resultat.id == 3) {
       errors.email = resultat.message;
-      return {errors}
-    } else if (resultat.id == 4){
+      return { errors };
+    } else if (resultat.id == 4) {
       errors.telf = resultat.message;
-      return {errors}
+      return { errors };
     }
-    
+
+    // Redirigir a la pàgina de login si el registre és correcte
     return redirect("/login");
   } catch (error) {
-    return json({ error: "Error del servidor. Torna-ho a intentar més tard." }, { status: 500 });
+    // Capturar errors del servidor i enviar un missatge genèric
+    return json(
+      { error: "Error del servidor. Torna-ho a intentar més tard." },
+      { status: 500 }
+    );
   }
 };
-
-
 
 export default function Register() {
   const actionData = useActionData<{ errors?: Record<string, string> }>();
@@ -77,7 +73,7 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Form */}
+      {/* Formulari de registre */}
       <div className="w-2/3 bg-[#faf8e8] flex flex-col items-center justify-center">
         <div className="w-3/4 max-w-lg p-8">
           <h1 className="text-3xl font-bold text-red-700 text-center mb-6">
@@ -85,7 +81,10 @@ export default function Register() {
           </h1>
           <Form method="post">
             <div className="space-y-2">
-            {actionData?.errors?.nick && <p className="text-red-500 text-sm">{actionData.errors.nick}</p>}
+              {/* Camps del formulari amb validació */}
+              {actionData?.errors?.nick && (
+                <p className="text-red-500 text-sm">{actionData.errors.nick}</p>
+              )}
               <input
                 type="text"
                 id="nick"
@@ -94,7 +93,9 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.name && <p className="text-red-500 text-sm">{actionData.errors.name}</p>}
+              {actionData?.errors?.name && (
+                <p className="text-red-500 text-sm">{actionData.errors.name}</p>
+              )}
               <input
                 type="text"
                 id="name"
@@ -103,7 +104,9 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.surname && <p className="text-red-500 text-sm">{actionData.errors.surname}</p>}
+              {actionData?.errors?.surname && (
+                <p className="text-red-500 text-sm">{actionData.errors.surname}</p>
+              )}
               <input
                 type="text"
                 id="surname"
@@ -112,7 +115,9 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.dni && <p className="text-red-500 text-sm">{actionData.errors.dni}</p>}
+              {actionData?.errors?.dni && (
+                <p className="text-red-500 text-sm">{actionData.errors.dni}</p>
+              )}
               <input
                 type="text"
                 id="dni"
@@ -121,7 +126,9 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.telf && <p className="text-red-500 text-sm">{actionData.errors.telf}</p>}
+              {actionData?.errors?.telf && (
+                <p className="text-red-500 text-sm">{actionData.errors.telf}</p>
+              )}
               <input
                 type="tel"
                 id="telf"
@@ -132,7 +139,9 @@ export default function Register() {
                 title="Introdueix un número de telèfon vàlid (9 dígits)."
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.email && <p className="text-red-500 text-sm">{actionData.errors.email}</p>}
+              {actionData?.errors?.email && (
+                <p className="text-red-500 text-sm">{actionData.errors.email}</p>
+              )}
               <input
                 type="email"
                 id="email"
@@ -141,7 +150,9 @@ export default function Register() {
                 required
                 className="w-full px-4 py-3 bg-gray-800 text-yellow-500 border-0 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
-              {actionData?.errors?.password && <p className="text-red-500 text-sm">{actionData.errors.password}</p>}
+              {actionData?.errors?.password && (
+                <p className="text-red-500 text-sm">{actionData.errors.password}</p>
+              )}
               <input
                 type="password"
                 id="password"
@@ -172,5 +183,3 @@ export default function Register() {
     </div>
   );
 }
-
-

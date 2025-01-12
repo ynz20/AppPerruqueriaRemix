@@ -5,7 +5,6 @@ export default function ReservationList({ reservations }: ReservationListProps) 
         <div className="grid grid-cols-2 gap-4">
             {reservations.length > 0 ? (
                 reservations.map((reservation) => {
-                    console.log('Reservation:', reservation.service); // AQUI
                     return (
                         <div
                             key={reservation.id}

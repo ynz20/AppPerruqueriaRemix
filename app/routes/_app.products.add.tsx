@@ -1,8 +1,8 @@
 import { ActionFunction } from "@remix-run/node";
 import { redirect, useNavigate } from "@remix-run/react";
-import ProductsForm from "../components/products/ProductsForm"; // Adaptat al formulari de productes
+import ProductsForm from "../components/products/ProductsForm";
 import Modal from "../components/utils/Modal";
-import { addProduct } from "../data/product.server"; // Funció per afegir un producte
+import { addProduct } from "../data/product.server";
 import { getTokenFromRequest } from "../utils/sessionUtils";
 
 export default function ProductsAddPage() {

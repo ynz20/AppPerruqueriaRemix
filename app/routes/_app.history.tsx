@@ -12,14 +12,14 @@ export const loader: LoaderFunction = async ({ request }) => {
         throw new Error("Inicia sessió per accedir.");
     }
 
+    // Obtenir la llista de torns des del servidor
     const torns = await getShifts(token);
-    console.log("torns amb en chi", torns);
+
     return torns;
 }
 
 export default function ShiftsPage() {
     const {shifts} = useLoaderData<{shifts: Shift[]}>();
-    console.log("torns amb en surrwoca", shifts);
     const location = useLocation();
     return (
         <>
@@ -34,7 +34,8 @@ export default function ShiftsPage() {
                             <h1 className="text-2xl font-bold mb-1 text-black">Llista de Torns</h1>
                             <TornList shifts ={shifts} />
                         </div>
-                    </main> : null
+                    </main> 
+                : null
             }
         </>
     )

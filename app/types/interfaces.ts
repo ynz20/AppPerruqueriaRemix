@@ -83,6 +83,11 @@ export interface Product{
   stock: number;
 }
 
+export interface ProductListProps {
+  products: Product[] | undefined;
+  token: string;
+}
+
 export interface Shift{
   id: number;
   start_time: string;
