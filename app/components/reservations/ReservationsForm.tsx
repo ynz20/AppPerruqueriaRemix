@@ -1,4 +1,3 @@
-// ReservationsForm.tsx
 import React, { useState } from "react";
 import {
   Form,
@@ -9,10 +8,7 @@ import {
   useOutletContext,
 } from "@remix-run/react";
 import useAvailableWorkers from "~/routes/useAvailableWorkers";
-
-interface ValidationErrors {
-  [key: string]: string;
-}
+import { ValidationErrors } from "~/types/interfaces";
 
 const ReservationsForm: React.FC = () => {
   const navigation = useNavigation();
@@ -30,6 +26,7 @@ const ReservationsForm: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedHour, setSelectedHour] = useState("");
   const [selectedService, setSelectedService] = useState("");
+  const [clientSearch, setClientSearch] = useState("");
 
   // Usar el custom hook
   const { workers, error } = useAvailableWorkers(
@@ -51,6 +48,18 @@ const ReservationsForm: React.FC = () => {
     setSelectedService(e.target.value);
   };
 
+  // Filtrar clients de manera dinàmica
+  const filteredClients = clients.filter((client) => {
+    const fullName = `${client.name} ${client.surname} ${client.dni}`.toLowerCase();
+    return fullName.includes(clientSearch.toLowerCase());
+  });
+
+  const handleClientSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setClientSearch(e.target.value);
+  };
+
   return (
     <Form
       method="post"
@@ -58,6 +67,23 @@ const ReservationsForm: React.FC = () => {
       className="flex flex-col rounded-lg bg-white-japan p-6 shadow-lg border border-gray-200"
     >
       {/* Client */}
+      <div className="mb-4">
+        <label
+          htmlFor="client-search"
+          className="mb-2 block text-sm font-medium text-gray-600"
+        >
+          Busca client
+        </label>
+        <input
+          type="text"
+          id="client-search"
+          name="clientSearch"
+          value={clientSearch}
+          onChange={handleClientSearchChange}
+          placeholder="Escriu el nom del client"
+          className="w-full rounded-md border bg-red-japan p-2 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
+        />
+      </div>
       <div className="mb-4">
         <label
           htmlFor="client"
@@ -72,7 +98,7 @@ const ReservationsForm: React.FC = () => {
           className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         >
           <option value="">Selecciona un client</option>
-          {clients.map((client) => (
+          {filteredClients.map((client) => (
             <option key={client.dni} value={client.dni}>
               {client.name} {client.surname} - {client.dni}
             </option>

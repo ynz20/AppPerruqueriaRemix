@@ -38,7 +38,7 @@ const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
       <div className="p-4">
         {/* Títol amb el nom del client o treballador */}
         <h1 className="text-2xl font-bold text-black-japan mb-4">
-          Historial de reserves {reservations[0]?.user?.name ? `- Treballador: ${reservations[0].user.name}` : `- Client: ${reservations[0]?.client.name}`}
+          Historial de reserves {reservations[0]?.user?.name ? `- Treballador: ${reservations[0].user.name} ${reservations[0].user.surname}` : `- Client: ${reservations[0]?.client.name} ${reservations[0].client.surname}`}
         </h1>
 
         {/* Llista de reserves */}
