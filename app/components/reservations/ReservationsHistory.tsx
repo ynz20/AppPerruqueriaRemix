@@ -57,7 +57,7 @@ const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
                   <span className="text-white">{reservation.service.name}</span>
                 </p>
                 <p className="text-white-japan">
-                  <strong>Client:</strong> {reservation.client.dni}
+                  <strong>Client:</strong> {reservation.client.name} {reservation.client.surname}
                 </p>
                 <p>
                   <strong className="text-white-japan">Rating:</strong>{" "}
