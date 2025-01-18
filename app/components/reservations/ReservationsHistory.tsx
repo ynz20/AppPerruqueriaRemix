@@ -34,7 +34,6 @@ const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations, treballad
       </p>
     );
   }
-  console.log(treballador);
   return (
     <>
       <head>
