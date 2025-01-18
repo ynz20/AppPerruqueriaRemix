@@ -7,6 +7,7 @@ import { getTokenFromRequest } from "~/utils/sessionUtils";
 
 interface LoaderData {
   reservations: Reservation[];
+  treballador: number;
 }
 
 // Loader per obtenir les reserves d'un client
@@ -20,7 +21,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   try {
     const data = await getReservationsByDNI(token, dni as string);
 
-    return json({ reservations: data.reservations });
+    return json({ reservations: data.reservations, treballador: data.treballador });
   } catch (error) {
     console.error("Error carregant les reserves:", error);
     throw new Response("Error al carregar les reserves.", { status: 500 });
@@ -28,8 +29,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 };
 
 export default function ReservationsClientPage() {
-  const { reservations } = useLoaderData<LoaderData>();
-  console.log(reservations);
+  const { reservations, treballador } = useLoaderData<LoaderData>();
   return (
     <>
 
@@ -40,7 +40,7 @@ export default function ReservationsClientPage() {
         <span>Tornar Enrere</span>
       </Link>
       <div className="p-4">
-        <ReservationsHistory reservations={reservations} />
+        <ReservationsHistory reservations={reservations} treballador={treballador} />
       </div>
     </>
   );

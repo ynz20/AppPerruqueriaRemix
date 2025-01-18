@@ -46,6 +46,7 @@ export interface Reservation {
   service: Service;  // Informació del servei
   comment: string;    // Comentari de la reserva
   rating: number;     // Puntuació de la reserva
+  treballador: number; //Identificació per saber si te treballador
 
 }
 

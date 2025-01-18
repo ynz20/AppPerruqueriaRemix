@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { ReservationListProps } from "~/types/interfaces";
 
-const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
+interface ClientsHistoryProps extends ReservationListProps {
+  treballador?: number; // Campo opcional que determina si se muestra el cliente o el trabajador
+}
+
+const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations, treballador }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const ITEMS_PER_PAGE = 4; // Nombre de reserves per pàgina
 
@@ -30,6 +34,7 @@ const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
       </p>
     );
   }
+  console.log(treballador);
   return (
     <>
       <head>
@@ -38,7 +43,10 @@ const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
       <div className="p-4">
         {/* Títol amb el nom del client o treballador */}
         <h1 className="text-2xl font-bold text-black-japan mb-4">
-          Historial de reserves {reservations[0]?.user?.name ? `- Treballador: ${reservations[0].user.name} ${reservations[0].user.surname}` : `- Client: ${reservations[0]?.client.name} ${reservations[0].client.surname}`}
+          Historial de reserves{" "}
+          {treballador === 0
+            ? `- Client: ${reservations[0]?.client?.name} ${reservations[0]?.client?.surname}`
+            : `- Treballador: ${reservations[0]?.user?.name} ${reservations[0]?.user?.surname}`}
         </h1>
 
         {/* Llista de reserves */}
@@ -53,20 +61,24 @@ const ClientsHistory: React.FC<ReservationListProps> = ({ reservations }) => {
                   {reservation.date} -- {reservation.hour}
                 </p>
                 <p>
-                  <strong className="text-white-japan">Servei:</strong>{" "}
+                  <strong className="text-white-japan">Servei: </strong>
                   <span className="text-white">{reservation.service.name}</span>
                 </p>
                 <p className="text-white-japan">
-                  <strong>Client:</strong> {reservation.client.name} {reservation.client.surname}
+                  <strong>{treballador == 0 ? "Treballador " : "Client "}:</strong>
+                  {treballador === 0
+                    ? `${reservation.user?.name} ${reservation.user?.surname}`
+                    : `${reservation.client?.name} ${reservation.client?.surname}`}
+                    
                 </p>
                 <p>
-                  <strong className="text-white-japan">Rating:</strong>{" "}
+                  <strong className="text-white-japan">Rating: </strong>
                   <span className="text-yellow-japan">
                     {reservation.rating}
                   </span>
                 </p>
                 <p className="text-white-japan">
-                  <strong>Comentari:</strong> {reservation.comment}
+                  <strong>Comentari: </strong> {reservation.comment}
                 </p>
               </div>
               <div className="flex justify-between items-center mt-4">

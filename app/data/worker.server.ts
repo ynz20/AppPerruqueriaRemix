@@ -224,14 +224,13 @@ export async function getReservationsByDNI(token: string, dni: string) {
 
     // Convertir la resposta del servidor a JSON
     const data = await response.json();
-
     // Retornar un array buit si no hi ha reserves
     if (!data.reservations) {
       return { reservations: [] };
     }
 
     // Retornar les reserves del client
-    return { reservations: data.reservations };
+    return { reservations: data.reservations, treballador: data.treballador };
   } catch (err) {
     // Gestionar errors i retornar una resposta d'error genèrica
     throw new Response("Error al carregar les reserves.", {
