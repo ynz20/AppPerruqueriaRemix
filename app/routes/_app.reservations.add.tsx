@@ -99,5 +99,5 @@ export async function action({ request }: { request: Request }) {
     return { errorMessage };
   }
 
-  return redirect("/reservations");
+  return redirect("/reservations?success=Reserva%20afegida%20correctament");
 }

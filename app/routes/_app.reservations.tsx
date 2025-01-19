@@ -1,9 +1,10 @@
 import { LoaderFunction } from "@remix-run/node";
-import { json, Link, Outlet, useLoaderData } from "@remix-run/react";
+import { json, Link, Outlet, useLoaderData, useSearchParams } from "@remix-run/react";
 import { useState, useEffect } from "react";
 import ReservationList from "~/components/reservations/ReservationList";
 import { Reservation } from "~/types/interfaces";
 import { getTokenFromRequest } from "~/utils/sessionUtils";
+import { ToastContainer, toast } from "react-toastify";
 
 export const loader: LoaderFunction = async ({ request }) => {
   try {
@@ -35,6 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export default function ReservationsPage() {
+  
   const { reservations, token } = useLoaderData<{
     reservations: Reservation[];
     token: string;
@@ -42,7 +44,16 @@ export default function ReservationsPage() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  
+  const [searchParams, setSearchParams] = useSearchParams();
+  useEffect(() => {
+    const successMessage = searchParams.get("success");
+    if (successMessage) {
+      toast.success(successMessage);
+      searchParams.delete("success");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   const fetchTurnState = async () => {
     try {
       const response = await fetch("http://localhost:8085/api/turn/status", {
@@ -115,6 +126,7 @@ export default function ReservationsPage() {
 
   return (
     <>
+    <ToastContainer />
       <head>
         <title>Gestió de Reserves</title>
       </head>
