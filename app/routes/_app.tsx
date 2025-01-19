@@ -1,9 +1,9 @@
-import { Outlet, Link, Form, useLoaderData } from "@remix-run/react";
+import { Outlet, Link, Form, useLoaderData, useNavigation } from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getUserRoleFromRequest } from "~/utils/sessionUtils";
 
-// Loader para obtener el rol del usuario
+// Loader per obtenir el rol del usuari
 export const loader: LoaderFunction = async ({ request }) => {
   const role = await getUserRoleFromRequest(request);
   return { role };
@@ -12,10 +12,23 @@ export const loader: LoaderFunction = async ({ request }) => {
 export default function Layout() {
   const { role } = useLoaderData<{ role: number | null }>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigation = useNavigation();
+
+  // Estat per controlar la càrrega
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Detecta quan la navegació comença i acaba
+  useEffect(() => {
+    if (navigation.state !== "idle") {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [navigation.state]);
 
   return (
     <div className="h-screen flex">
-      {/* Overlay para el menú lateral en pantallas pequeñas */}
+      {/* Overlay per al menú lateral en pantalles petites */}
       {isMenuOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -30,7 +43,6 @@ export default function Layout() {
         } lg:translate-x-0 lg:static lg:w-64 transition-transform duration-300 ease-in-out z-50 flex flex-col items-start justify-center p-5`}
       >
         <ul className="space-y-6 w-full text-left">
-          {/* Links según el rol */}
           {role === 0 && (
             <>
               <li className="pl-4">
@@ -124,7 +136,7 @@ export default function Layout() {
                   className="text-lg font-semibold hover:text-yellow-japan transition"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Historial de reserves
+                  Torns
                 </Link>
               </li>
               <li className="pl-4">
@@ -139,7 +151,6 @@ export default function Layout() {
             </>
           )}
           <li className="pl-4">
-            {/* Formulario de logout */}
             <Form method="post" action="/logout">
               <button
                 type="submit"
@@ -153,7 +164,7 @@ export default function Layout() {
         </ul>
       </nav>
 
-      {/* Botón de menú hamburguesa para pantallas pequeñas */}
+      {/* Botó de menú hamburguesa */}
       <button
         className="lg:hidden fixed top-4 left-4 text-black-japan z-50 mt-8"
         onClick={() => setIsMenuOpen(true)}
@@ -162,7 +173,14 @@ export default function Layout() {
         ☰
       </button>
 
-      {/* Contenido principal */}
+      {/* Rodeta de càrrega */}
+      {isLoading && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="loader border-t-4 border-b-4 border-yellow-japan rounded-full w-12 h-12 animate-spin"></div>
+        </div>
+      )}
+
+      {/* Contingut principal */}
       <main className="flex-1 bg-white-japan p-6 lg:ml-0">
         <Outlet />
       </main>

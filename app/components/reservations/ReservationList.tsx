@@ -77,7 +77,7 @@ const ReservationCalendar: React.FC<ReservationCalendarProps> = ({
       className="calendar-container"
       style={{
         maxWidth: "100%",
-        height: "80vh", // Altura completa de la vista
+        height: "70vh", // Altura completa de la vista
         padding: "10px",
         borderRadius: "8px",
         overflowX: "auto", // Permetre el desplaçament horitzontal si cal

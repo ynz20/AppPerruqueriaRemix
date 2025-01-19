@@ -124,19 +124,19 @@ export default function ReservationsPage() {
         <div className="flex justify-between items-center gap-4 mt-4">
           <Link
             to="add"
-            className="flex items-center justify-center rounded bg-red-japan px-4 py-2 text-white shadow-md hover:bg-red-700 h-10"
+            className="flex items-center justify-center rounded bg-red-japan px-4 py-2 text-white shadow-md hover:bg-red-700 h-10 text-sm sm:text-base whitespace-nowrap"
           >
             <span>Afegir Reserva</span>
           </Link>
 
           <div className="flex items-center gap-2">
             {!isOpen && (
-              <span className="text-gray-700">Obre un torn per tractar amb les reserves</span>
+              <span className="text-gray-700 text-xs sm:text-sm">Obre un torn per tractar amb les reserves</span>
             )}
             <button
               onClick={toggleTurn}
               disabled={isLoading}
-              className={`rounded px-4 py-2 text-white h-10 ${
+              className={`rounded px-4 py-2 text-white h-10 text-sm sm:text-base whitespace-nowrap ${
                 isLoading
                   ? "bg-gray-500"
                   : isOpen
