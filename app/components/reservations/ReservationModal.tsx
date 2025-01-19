@@ -32,6 +32,23 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
     onClose(); 
   };
 
+
+  async function deleteReservation(id: number, token:string) {
+    console.log(id);
+    const response = await fetch(`http://localhost:8085/api/reservations/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  
+    if (!response.ok) {
+      throw new Error(`Errorg3 ${response.status}: ${response.statusText}`);
+    }
+    refreshReservations(); // Recargar la llista de reserves
+    handleClose(); // Tancar el modal
+  }
+
   const updateReservationStatus = async (newStatus: string) => {
     const response = await fetch(
       `http://localhost:8085/api/reservations/${reservation.id}/status`,
@@ -142,7 +159,8 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
           {!isCompleted && !isCancelled && (
             <>
               <button
-                onClick={() => updateReservationStatus("cancelled")}
+                onClick={() => deleteReservation(reservation.id, token)}
+
                 className="w-full py-2 bg-red-japan text-white text-sm font-semibold rounded-lg hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-japan focus:ring-offset-2 transition-all duration-200"
               >
                 Cancel·lar Reserva

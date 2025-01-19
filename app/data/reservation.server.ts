@@ -31,4 +31,17 @@ export async function addReservation(reservationData: ReservationData, token: st
 }
 
 
+export async function deleteReservation(id: number, token:string) {
+  const response = await fetch(`http://localhost:8085/api/reservations/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: ${response.statusText}`);
+  }
+}
+
 
