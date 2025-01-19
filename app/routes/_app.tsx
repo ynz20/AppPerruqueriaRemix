@@ -1,4 +1,10 @@
-import { Outlet, Link, Form, useLoaderData, useNavigation } from "@remix-run/react";
+import {
+  Outlet,
+  Link,
+  Form,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { LoaderFunction } from "@remix-run/node";
 import { useState, useEffect } from "react";
 import { getUserRoleFromRequest } from "~/utils/sessionUtils";
@@ -19,11 +25,14 @@ export default function Layout() {
 
   // Detecta quan la navegació comença i acaba
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
     if (navigation.state !== "idle") {
-      setIsLoading(true);
+      timeout = setTimeout(() => setIsLoading(true), 100); // Espera 100ms abans de mostrar la rodeta
     } else {
+      clearTimeout(timeout);
       setIsLoading(false);
     }
+    return () => clearTimeout(timeout);
   }, [navigation.state]);
 
   return (
@@ -175,7 +184,7 @@ export default function Layout() {
 
       {/* Rodeta de càrrega */}
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-300 opacity-100">
           <div className="loader border-t-4 border-b-4 border-yellow-japan rounded-full w-12 h-12 animate-spin"></div>
         </div>
       )}
