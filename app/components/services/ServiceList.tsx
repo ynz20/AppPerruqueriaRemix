@@ -13,9 +13,9 @@ export default function ServiceList({ services }: ServiceListProps) {
       if (window.innerWidth < 640) {
         setItemsPerPage(1); // Pantalles petites: 1 servei per pàgina
       } else if (window.innerWidth < 1024) {
-        setItemsPerPage(3); // Pantalles mitjanes: 4 serveis per pàgina
+        setItemsPerPage(2); // Pantalles mitjanes: 4 serveis per pàgina
       } else {
-        setItemsPerPage(8); // Pantalles grans: 8 serveis per pàgina
+        setItemsPerPage(4); // Pantalles grans: 8 serveis per pàgina
       }
     };
 
