@@ -3,6 +3,7 @@ import { ActionFunction, LoaderFunction, json } from "@remix-run/node";
 import { sessionStorage, getTokenFromRequest } from "../utils/sessionUtils";
 import { ActionData } from "~/types/interfaces";
 import { login } from "~/data/worker.server";
+import { useState } from "react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await getTokenFromRequest(request);
@@ -53,6 +54,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Login() {
   const actionData = useActionData<ActionData>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <>
@@ -65,7 +67,7 @@ export default function Login() {
           <div className="text-center">
             <img
               src="../../public/haircutLogo.png"
-              alt="Icono"
+              alt="Icona"
               className="mb-6 w-20 h-20 bottom-100 transform -translate-x-1/3 z-10"
             />
             <h1 className="text-4xl font-bold">Hola</h1>
@@ -82,7 +84,7 @@ export default function Login() {
                 {actionData.error}
               </p>
             )}
-            <Form method="post">
+            <Form method="post" onSubmit={() => setIsSubmitting(true)}>
               <div className="mb-6">
                 <input
                   type="text"
@@ -114,8 +116,9 @@ export default function Login() {
               <button
                 type="submit"
                 className="w-full py-3 bg-gray-900 text-white font-semibold rounded-md shadow-sm hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                disabled={isSubmitting}
               >
-                Entrar
+                {isSubmitting ? "Accedint..." : "Entrar"}
               </button>
             </Form>
           </div>
