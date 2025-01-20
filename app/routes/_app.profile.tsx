@@ -34,7 +34,7 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = session.get("user_id");
 
   if (!userId) {
-    return json({ error: "Usuari no autenticat." }, { status: 401 });
+    return json({ errors: { general: "Usuari no autenticat." } }, { status: 401 });
   }
 
   const formData = await request.formData();
@@ -44,27 +44,33 @@ export const action: ActionFunction = async ({ request }) => {
     nick: formData.get("nick") as string,
     telf: formData.get("telf") as string,
     email: formData.get("email") as string,
-    dni: formData.get("dni") as string, // DNI recuperat del camp hidden
+    dni: formData.get("dni") as string,
     role: false,
   };
 
   const password = formData.get("password") as string;
   if (password) {
-    updatedData.password = password; // Només afegeix la contrasenya si no està buida
+    updatedData.password = password;
   }
 
   try {
     const token = await getTokenFromRequest(request);
-    await updateUser(updatedData, updatedData.dni, token);
+    const message = await updateUser(updatedData, updatedData.dni, token);
+
+    if (message) {
+      return json({ errors: { general: message } }, { status: 400 });
+    }
+
     return json({ success: "Perfil actualitzat correctament!" });
   } catch (error) {
     if (error instanceof Response) {
       const errorData = await error.json();
       return json({ errors: errorData.errors }, { status: error.status });
     }
-    return json({ errors: { general: "Error desconegut" } }, { status: 400 });
+    return json({ errors: { general: "Error desconegut. Si us plau, torna-ho a intentar." } }, { status: 400 });
   }
 };
+
 
 export default function Profile() {
   const data = useLoaderData<{ user: User }>();
@@ -94,11 +100,16 @@ export default function Profile() {
         {actionData?.errors && (
           <div className="bg-red-50 text-red-600 p-4 rounded mb-6 border border-red-200">
             <ul>
-              {Object.entries(actionData.errors).map(([field, message]) => (
+            {actionData.errors.general && (
+                <li>
+                  <strong>Error:</strong> {actionData.errors.general}
+                </li>
+              )}
+              {/* {Object.entries(actionData.errors).map(([field, message]) => (
                 <li key={field}>
                   <strong className="capitalize">{field}:</strong> {message}
                 </li>
-              ))}
+              ))} */}
             </ul>
           </div>
         )}
@@ -110,6 +121,7 @@ export default function Profile() {
         )}
 
         <Form method="post" className="space-y-3">
+        {/* {error ? <p className="text-red-500 text-sm">{error}</p> : null} */}
           {[
             { id: "name", label: "Nom", type: "text", value: user.name },
             {
