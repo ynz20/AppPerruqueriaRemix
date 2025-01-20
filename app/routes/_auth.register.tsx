@@ -94,7 +94,7 @@ export default function Register() {
             </h1>
             <Form method="post" onSubmit={handleSubmit}>
               <div className="space-y-2">
-                {/* Camps del formulari amb validació */}
+                {/* Camps del formulari amb validació  */}
                 {actionData?.errors?.nick && (
                   <p className="text-red-500 text-sm">
                     {actionData.errors.nick}
