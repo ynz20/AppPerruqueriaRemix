@@ -166,7 +166,7 @@ export default function Layout() {
                 className="text-lg text-yellow-japan font-semibold hover:text-red-japan transition"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {role === 0 ? "Tanca sessió" : "Sortir"}
+                Tanca sessió
               </button>
             </Form>
           </li>

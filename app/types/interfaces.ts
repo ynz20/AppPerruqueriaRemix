@@ -20,6 +20,10 @@ export interface ClientListProps {
   clients: Client[] | undefined;
 }
 
+export interface ClientsHistoryProps extends ReservationListProps {
+  treballador?: number;
+}
+
 //Exclusives Serveis
 export interface Service {
   id: number;

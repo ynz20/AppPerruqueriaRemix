@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { ReservationListProps } from "~/types/interfaces";
+import { ClientsHistoryProps } from "~/types/interfaces";
 
-interface ClientsHistoryProps extends ReservationListProps {
-  treballador?: number; // Campo opcional que determina si se muestra el cliente o el trabajador
-}
 
 const ClientsHistory: React.FC<ClientsHistoryProps> = ({ reservations, treballador }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);

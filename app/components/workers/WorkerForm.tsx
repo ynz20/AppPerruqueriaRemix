@@ -45,6 +45,13 @@ import {
         {workerData.dni && <input type="hidden" name="dni" value={workerData.dni} />}
         <h1 className="text-2xl font-bold text-red-japan mb-6">Edita Treballador</h1>
   
+        {validationErrors && (
+          <ul className="mb-4 list-inside list-disc text-sm text-red-500">
+            {Object.values(validationErrors).map((error: string) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        )}
         <div className="mb-4">
           <label
             htmlFor="dni"
@@ -158,14 +165,6 @@ import {
             placeholder="Correu electrònic"
           />
         </div>
-  
-        {validationErrors && (
-          <ul className="mb-4 list-inside list-disc text-sm text-red-500">
-            {Object.values(validationErrors).map((error: string) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        )}
   
         <div className="flex items-center justify-between mt-6">
           <button

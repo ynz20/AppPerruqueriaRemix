@@ -3,7 +3,7 @@ import { ActionFunction, LoaderFunction, json } from "@remix-run/node";
 import { sessionStorage, getTokenFromRequest } from "../utils/sessionUtils";
 import { ActionData } from "~/types/interfaces";
 import { login } from "~/data/worker.server";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await getTokenFromRequest(request);
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
   const identifier = formData.get("identifier");
   const password = formData.get("password");
 
-  const isEmail = /^[^\s@]+@[^\s@]+\\.[^\s@]+$/.test(identifier as string);
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(identifier as string);
 
   const data = isEmail
     ? { email: identifier as string, password: password as string }
@@ -56,11 +56,18 @@ export default function Login() {
   const actionData = useActionData<ActionData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (actionData?.error) {
+      setIsSubmitting(false);
+    }
+  }, [actionData]);
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+  };
+
   return (
     <>
-      <head>
-        <title>Inicia Sessió</title>
-      </head>
       <div className="flex h-screen">
         {/* Aquest div desapareix en pantalles petites */}
         <div className="hidden md:flex w-1/3 bg-black-japan text-yellow-japan flex-col items-center justify-center">
@@ -84,7 +91,7 @@ export default function Login() {
                 {actionData.error}
               </p>
             )}
-            <Form method="post" onSubmit={() => setIsSubmitting(true)}>
+            <Form method="post" onSubmit={handleSubmit}>
               <div className="mb-6">
                 <input
                   type="text"

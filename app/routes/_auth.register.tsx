@@ -2,7 +2,7 @@ import { ActionFunction, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { userFormValidator } from "~/data/validacio.server";
 import { register } from "~/data/worker.server";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();
@@ -60,11 +60,18 @@ export default function Register() {
   const actionData = useActionData<{ errors?: Record<string, string> }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  useEffect(() => {
+    if (actionData?.errors) {
+      setIsSubmitting(false);
+    }
+  }, [actionData]);
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+  };
+
   return (
     <>
-      <head>
-        <title>Registra&apos;t!</title>
-      </head>
       <div className="flex min-h-screen overflow-hidden">
         {/* Menú Lateral: ocult a pantalles petites */}
         <div className="hidden md:flex w-1/3 bg-black-japan text-yellow-japan flex-col items-center justify-center">
@@ -85,7 +92,7 @@ export default function Register() {
             <h1 className="text-3xl font-bold text-red-japan text-center mb-6">
               Benvingut/da!
             </h1>
-            <Form method="post" onSubmit={() => setIsSubmitting(true)}>
+            <Form method="post" onSubmit={handleSubmit}>
               <div className="space-y-2">
                 {/* Camps del formulari amb validació */}
                 {actionData?.errors?.nick && (
