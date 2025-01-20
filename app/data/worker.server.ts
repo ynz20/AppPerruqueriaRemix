@@ -151,7 +151,10 @@ export async function updateWorker(
     }
 
     const data = await response.json();
-    return json(data);
+
+    if (data.id == 1 || data.id == 2 || data.id == 3) {
+      return data.message; // Missatge d'error proporcionat pel servidor
+    }
   } catch (error) {
     throw new Response(
       "Error en actualitzar les dades del treballador. Intenta-ho més tard.",
@@ -200,7 +203,13 @@ export async function updateUser(
     throw json(errorData, { status: response.status });
   }
 
-  return response.json();
+      // Convertir la resposta del servidor a JSON
+      const data = await response.json();
+
+      // Retornar un missatge d'error específic si hi ha problemes amb les dades del client
+      if (data.id == 1 || data.id == 2 || data.id == 3) {
+        return data.message; // Missatge d'error proporcionat pel servidor
+      }
 }
 
 export async function getReservationsByDNI(token: string, dni: string) {

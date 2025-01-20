@@ -32,7 +32,11 @@ export async function action({ request }) {
       email: formData.get("email"),
     };
 
-    await updateWorker(workerData, token);
+    const message = await updateWorker(workerData, token);
+    if (message){
+      const error = message;
+      return {error};
+    }
   }
 
   return redirect("/workers");
