@@ -19,9 +19,9 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
   const [rating, setRating] = useState<number>(0);
   const [comment, setComment] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // Estat per controlar si s'està enviant la petició
 
   if (!isOpen || !reservation) return null;
-
 
   // Reset dels camps i el missatge de error quan es tenca el modal
   const handleClose = () => {
@@ -29,7 +29,8 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
     setRating(0);
     setComment("");
     setErrorMessage("");
-    onClose(); 
+    setIsSubmitting(false); // Reset de l'estat d'enviament
+    onClose();
   };
 
 
@@ -77,6 +78,8 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
       return;
     }
 
+    setIsSubmitting(true); // Marcar que la petició s'està enviant
+
     try {
       const response = await fetch(
         `http://localhost:8085/api/reservations/${reservation.id}/rate`,
@@ -99,6 +102,8 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
     } catch (error: any) {
       console.error("Error al completar la reserva:", error.message);
       setErrorMessage(error.message || "Hi ha hagut un error inesperat.");
+    } finally {
+      setIsSubmitting(false); // Marcar que la petició ha acabat
     }
   };
 
@@ -180,9 +185,10 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                     type="number"
                     min="1"
                     max="5"
-                    value={rating}
+                    value={rating || ''}
                     onChange={(e) => setRating(Number(e.target.value))}
                     className="w-full p-2 border border-gray-300 rounded-md"
+                    placeholder="Puntua de 1 a 5"
                   />
                   <label
                     htmlFor="comment"
@@ -205,8 +211,13 @@ const ReservationModal: React.FC<ReservationModalProps> = ({
                   showRatingForm ? handleCompleteReservation() : setShowRatingForm(true)
                 }
                 className="w-full py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-600 focus:ring-offset-2 transition-all duration-200"
+                disabled={isSubmitting} // Deshabilitar el botó mentre s'envia la petició
               >
-                {showRatingForm ? "Envia Valoració" : "Completa Reserva"}
+                {isSubmitting
+                  ? "Enviant..."
+                  : showRatingForm
+                  ? "Envia Valoració"
+                  : "Completa Reserva"}
               </button>
             </>
           )}
