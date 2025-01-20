@@ -14,6 +14,8 @@ const ReservationsForm: React.FC = () => {
   const navigation = useNavigation();
   const validationErrors = useActionData<ValidationErrors>();
   const isSubmitting = navigation.state !== "idle";
+
+  const today = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
   
 
   const { clients, services } = useLoaderData<{
@@ -153,6 +155,7 @@ const ReservationsForm: React.FC = () => {
           name="day"
           required
           onChange={handleDateChange}
+          min={today}  
           className="w-full rounded-md border border-gray-300 p-3 text-white-japan shadow-sm focus:border-red-japan focus:outline-none focus:ring-2 focus:ring-red-japan"
         />
         {validationErrors?.day && (
